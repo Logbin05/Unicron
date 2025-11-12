@@ -19,3 +19,4 @@ export interface UsersFinances {
   created_at: string;
   updated_at: string;
 }
+
