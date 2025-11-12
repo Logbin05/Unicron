@@ -7,6 +7,7 @@ export function AppRoutes() {
       <Routes>
         <Route path="/">
           <Route index element={<MainPage />} />
+          <Route path="profile" element={<MainPage />} />
         </Route>
       </Routes>
     </>
