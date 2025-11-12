@@ -16,10 +16,8 @@ export interface AuthLogin {
 
 export interface AuthRegister {
   full_name: string;
-  email: string;
-  phone_number: string;
-  city: string;
   login: string;
+  email: string;
   password: string;
   confirm_password?: string;
   policy?: boolean;

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { motion } from "motion/react";
-import { ImageMainSvg } from "../shared/image_main";
-import { BiLogIn, BiUserPlus, BiMenu, BiX } from "react-icons/bi";
-import { FaTelegramPlane, FaGithub, FaYoutube } from "react-icons/fa";
 import { Link } from "react-router";
+import { ImageMainSvg } from "@shared/image_main";
 import { LoginForm } from "@features/auth/login/login";
-// import { SignUpForm } from "../auth/SignUpForm";
+import { BiLogIn, BiUserPlus, BiMenu, BiX } from "react-icons/bi";
+import { SignUpForm } from "@features/auth/registration/registration";
+import { FaTelegramPlane, FaGithub, FaYoutube } from "react-icons/fa";
 
 export function MainPage() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -150,8 +150,8 @@ export function MainPage() {
         </div>
       )}
 
-      {/* {signupModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      {signupModal && (
+        <div className="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-2xl w-11/12 max-w-md relative">
             <button
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
@@ -162,7 +162,7 @@ export function MainPage() {
             <SignUpForm action={() => setSignupModal(false)} />
           </div>
         </div>
-      )} */}
+      )}
 
       <footer className="xs:my-10 xs:px-6 xs:py-8 bg-[#0a0a0a] text-sixth">
         <nav
