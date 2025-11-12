@@ -1,0 +1,25 @@
+syntax = "proto3";
+package institutions;
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+message Institution {
+  int64 institution_id = 1;
+  int64 owner_user_id = 2;
+  string institution_name = 3;
+  string institution_avatar = 4;
+  string institution_type = 5;
+  string institution_desc = 6;
+  common.Meta metadata = 7;
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+message InstitutionMember {
+  int64 inst_member_id = 1;
+  int64 institution_id = 2;
+  int64 user_id = 3;
+  string role_in_institution = 4;
+  google.protobuf.Timestamp joined_at = 5;
+}
