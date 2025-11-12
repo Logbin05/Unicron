@@ -11,11 +11,22 @@ export function Fields<T extends FieldValues>({
     <div className={className}>
       {fields.map((field) => {
         const error = errors?.[field.name];
-        const inputClasses = `${field.inputClassName ?? ""} ${
-          error ? "!border-fourth" : ""
+
+        const baseInput = `
+          border-1 rounded-xl p-2 w-full
+          focus:outline-none focus:ring focus:ring-offset-0
+          transition-all duration-150
+        `;
+
+        const colorClass = error
+          ? "border-red-400 focus:border-red-500 focus:ring-red-300"
+          : "border-gray-300 focus:border-third focus:ring-third active:border-fifth";
+
+        const inputClasses = `${baseInput} ${colorClass} ${
+          field.inputClassName ?? ""
         }`;
         const labelClasses = `${field.labelClassName ?? ""} ${
-          error ? "text-fourth" : ""
+          error ? "text-red-400" : ""
         }`;
 
         return (
@@ -37,7 +48,10 @@ export function Fields<T extends FieldValues>({
                   className={`w-5 h-5 border rounded-sm flex items-center justify-center
                     transition-colors duration-200 lg:cursor-pointer
                     peer-checked:bg-primary peer-checked:border-primary
-                    ${error ? "border-secondary" : ""} ${inputClasses}`}
+                    ${error ? "border-red-400" : ""} ${
+                    field.inputClassName ?? ""
+                  }
+                  `}
                 >
                   <svg
                     width="24"
@@ -50,7 +64,7 @@ export function Fields<T extends FieldValues>({
                     <path d="M20 6L9 17L4 12" />
                   </svg>
                 </div>
-                <span className={`ml-2 ${error ? "text-fourth" : ""}`}>
+                <span className={`ml-2 ${error ? "text-red-400" : ""}`}>
                   {field.label}
                 </span>
               </label>
@@ -59,29 +73,17 @@ export function Fields<T extends FieldValues>({
                 <div className="flex items-center gap-2">
                   {field.label}
                   {error && (
-                    <span className="flex items-center gap-1 text-fourth xs:text-10 sm:text-12 md:text-14 lg:text-12">
+                    <span className="flex items-center gap-1 text-red-400 text-xs">
                       <svg
-                        width="15"
-                        height="15"
+                        width="18"
+                        height="18"
                         viewBox="0 0 24 24"
                         fill="none"
-                        className="stroke-br-secondary-4"
+                        className="stroke-red-400"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
-                          d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M12 8V12"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                        <path
-                          d="M12 16H12.01"
+                          d="M12 8V12M12 16H12.01M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
                           strokeWidth="2"
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -92,6 +94,7 @@ export function Fields<T extends FieldValues>({
                   )}
                 </div>
                 <input
+                  id={field.name}
                   type={field.type}
                   {...register(field.name, {
                     pattern: field.pattern,

@@ -71,8 +71,10 @@ export function LoginForm({ action }: { action: () => void }) {
               required: true,
               type: typeInput.text,
               labelClassName: `text-gray-700 font-light text-sm md:text-base`,
-              inputClassName: `border-2 border-gray-300 rounded-xl p-2 w-full md:w-72
-                focus:border-blue-500 focus:ring focus:ring-blue-200`,
+              inputClassName: `border-2 border-gray-300 rounded-xl p-2
+                w-full md:w-72 lg:w-80
+                active:border-fifth
+                focus:ring focus:border-third focus:ring-third`,
             },
             {
               name: "password",
@@ -80,8 +82,10 @@ export function LoginForm({ action }: { action: () => void }) {
               required: true,
               type: typeInput.password,
               labelClassName: `text-gray-700 font-light text-sm md:text-base`,
-              inputClassName: `border-2 border-gray-300 rounded-xl p-2 w-full md:w-72
-                focus:border-blue-500 focus:ring focus:ring-blue-200`,
+              inputClassName: `border-2 border-gray-300 rounded-xl p-2
+                w-full md:w-72 lg:w-80
+                active:border-fifth
+                focus:ring focus:border-third focus:ring-third`,
             },
           ]}
         />
