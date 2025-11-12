@@ -81,8 +81,9 @@ export function SignUpForm({ action }: { action: () => void }) {
                 required: true,
                 type: typeInput.text,
                 labelClassName: `text-gray-700 font-light text-sm md:text-base`,
-                inputClassName: `border-2 border-gray-300 rounded-xl p-2 w-full md:w-72
-                focus:border-blue-500 focus:ring focus:ring-blue-200`,
+                inputClassName: `border-2 border-gray-300 rounded-xl p-2
+                w-full md:w-72 lg:w-90
+                focus:border-fifth focus:ring focus:ring-fifth`,
                 minLength: 5,
                 maxLength: 100,
                 pattern: {
@@ -96,8 +97,9 @@ export function SignUpForm({ action }: { action: () => void }) {
                 required: true,
                 type: typeInput.email,
                 labelClassName: `text-gray-700 font-light text-sm md:text-base`,
-                inputClassName: `border-2 border-gray-300 rounded-xl p-2 w-full md:w-72
-                focus:border-blue-500 focus:ring focus:ring-blue-200`,
+                inputClassName: `border-2 border-gray-300 rounded-xl p-2
+                w-full md:w-72 lg:w-90
+                focus:border-fifth focus:ring focus:ring-fifth`,
                 maxLength: 70,
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
@@ -110,8 +112,9 @@ export function SignUpForm({ action }: { action: () => void }) {
                 required: true,
                 type: typeInput.text,
                 labelClassName: `text-gray-700 font-light text-sm md:text-base`,
-                inputClassName: `border-2 border-gray-300 rounded-xl p-2 w-full md:w-72
-                focus:border-blue-500 focus:ring focus:ring-blue-200`,
+                inputClassName: `border-2 border-gray-300 rounded-xl p-2
+                w-full md:w-72 lg:w-90
+                focus:border-fifth focus:ring focus:ring-fifth`,
               },
               {
                 name: "password",
@@ -119,8 +122,9 @@ export function SignUpForm({ action }: { action: () => void }) {
                 required: true,
                 type: typeInput.password,
                 labelClassName: `text-gray-700 font-light text-sm md:text-base`,
-                inputClassName: `border-2 border-gray-300 rounded-xl p-2 w-full md:w-72
-                focus:border-blue-500 focus:ring focus:ring-blue-200`,
+                inputClassName: `border-2 border-gray-300 rounded-xl p-2
+                w-full md:w-72 lg:w-90
+                focus:border-fifth focus:ring focus:ring-fifth`,
                 minLength: {
                   value: 8,
                   message: "Password must be at least 8 characters",
@@ -138,8 +142,9 @@ export function SignUpForm({ action }: { action: () => void }) {
                 required: true,
                 type: typeInput.password,
                 labelClassName: `text-gray-700 font-light text-sm md:text-base`,
-                inputClassName: `border-2 border-gray-300 rounded-xl p-2 w-full md:w-72
-                focus:border-blue-500 focus:ring focus:ring-blue-200`,
+                inputClassName: `border-2 border-gray-300 rounded-xl p-2
+                w-full md:w-72 lg:w-90
+                focus:border-fifth focus:ring focus:ring-fifth`,
                 minLength: {
                   value: 8,
                   message: "Password must be at least 8 characters",
@@ -167,7 +172,7 @@ export function SignUpForm({ action }: { action: () => void }) {
             <Button
               type={typeButton.submit}
               className="border border-fifth text-fourth font-semibold py-2
-            rounded-xl transition-all hover:bg-fifth
+              rounded-xl transition-all hover:bg-fifth
             active:bg-fourth active:text-sixth"
             >
               sing up
@@ -176,8 +181,8 @@ export function SignUpForm({ action }: { action: () => void }) {
               onClick={openLogin}
               type={typeButton.button}
               className="border border-fifth text-fourth font-semibold py-2
-            rounded-xl transition-all hover:bg-fifth
-            active:bg-fourth active:text-sixth"
+              rounded-xl transition-all hover:bg-fifth
+              active:bg-fourth active:text-sixth"
             >
               Login
             </Button>
