@@ -1,0 +1,22 @@
+syntax = "proto3";
+package finance;
+
+import "google/protobuf/timestamp.proto";
+
+message BuyHistory {
+  int64 bh_id = 1;
+  int64 user_id = 2;
+  int64 service_id = 3;
+  double amount = 4;
+  string currency = 5;
+  string payment_provider = 6;
+  string provider_payment_id = 7;
+  google.protobuf.Timestamp created_at = 8;
+}
+
+message Basket {
+  int64 basket_id = 1;
+  int64 user_id = 2;
+  int64 service_id = 3;
+  google.protobuf.Timestamp added_at = 4;
+}

@@ -1,0 +1,42 @@
+syntax = "proto3";
+package users;
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+message Role {
+  int64 role_id = 1;
+  string role_name = 2;
+}
+
+message UserFinance {
+  int64 uf_id = 1;
+  int64 user_id = 2;
+  string card_id = 3;
+  string currency = 4;
+  double balance = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+message User {
+  int64 user_id = 1;
+  int64 role_id = 2;
+  int64 uf_id = 3;
+  string full_name = 4;
+  string login = 5;
+  string email = 6;
+  string avatar = 7;
+  string password_hash = 8;
+  bool is_verified = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
+}
+
+message Log {
+  int64 log_id = 1;
+  int64 user_id = 2;
+  string action = 3;
+  common.Meta meta = 4;
+  google.protobuf.Timestamp created_at = 5;
+}

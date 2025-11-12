@@ -1,0 +1,28 @@
+syntax = "proto3";
+package common;
+
+import "google/protobuf/struct.proto";
+
+enum Visibility {
+  VISIBILITY_UNSPECIFIED = 0;
+  PUBLIC = 1;
+  PRIVATE = 2;
+}
+
+enum EnrollmentStatus {
+  ENROLLMENT_STATUS_UNSPECIFIED = 0;
+  ENROLLMENT_STATUS_ENROLLED = 1;
+  ENROLLMENT_STATUS_COMPLETED = 2;
+  ENROLLMENT_STATUS_CANCELLED = 3;
+}
+
+enum SubscriptionStatus {
+  SUBSCRIPTION_STATUS_UNSPECIFIED = 0;
+  SUBSCRIPTION_STATUS_ACTIVE = 1;
+  SUBSCRIPTION_STATUS_EXPIRED = 2;
+  SUBSCRIPTION_STATUS_CANCELLED = 3;
+}
+
+message Meta {
+  google.protobuf.Struct data = 1;
+}

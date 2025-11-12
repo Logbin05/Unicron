@@ -1,0 +1,33 @@
+syntax = "proto3";
+package progress;
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+message Enrollment {
+  int64 enrollment_id = 1;
+  int64 user_id = 2;
+  int64 course_id = 3;
+  double progress = 4;
+  common.EnrollmentStatus status = 5;
+  google.protobuf.Timestamp started_at = 6;
+  google.protobuf.Timestamp completed_at = 7;
+}
+
+message LessonProgress {
+  int64 lp_id = 1;
+  int64 enrollment_id = 2;
+  int64 lesson_id = 3;
+  string status = 4;
+  double progress = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message Certificate {
+  string certificate_id = 1;
+  int64 user_id = 2;
+  int64 course_id = 3;
+  google.protobuf.Timestamp issued_at = 4;
+  common.Meta metadata = 5;
+  bool revoked = 6;
+}
