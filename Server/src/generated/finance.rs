@@ -29,3 +29,410 @@ pub struct Basket {
     #[prost(message, optional, tag = "4")]
     pub added_at: ::core::option::Option<::prost_types::Timestamp>,
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateBuyReq {
+    #[prost(int64, tag = "1")]
+    pub user_id: i64,
+    #[prost(int64, tag = "2")]
+    pub service_id: i64,
+    #[prost(double, tag = "3")]
+    pub amount: f64,
+    #[prost(string, tag = "4")]
+    pub currency: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
+    pub payment_provider: ::prost::alloc::string::String,
+    #[prost(string, tag = "6")]
+    pub provider_payment_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetBuyReq {
+    #[prost(int64, tag = "1")]
+    pub bh_id: i64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListBuyReq {
+    #[prost(int64, tag = "1")]
+    pub user_id: i64,
+    #[prost(int32, tag = "2")]
+    pub limit: i32,
+    #[prost(int32, tag = "3")]
+    pub offset: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListBuyRes {
+    #[prost(message, repeated, tag = "1")]
+    pub items: ::prost::alloc::vec::Vec<BuyHistory>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct AddToBasketReq {
+    #[prost(int64, tag = "1")]
+    pub user_id: i64,
+    #[prost(int64, tag = "2")]
+    pub service_id: i64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RemoveFromBasketReq {
+    #[prost(int64, tag = "1")]
+    pub basket_id: i64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RemoveFromBasketRes {
+    #[prost(bool, tag = "1")]
+    pub success: bool,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListBasketReq {
+    #[prost(int64, tag = "1")]
+    pub user_id: i64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListBasketRes {
+    #[prost(message, repeated, tag = "1")]
+    pub items: ::prost::alloc::vec::Vec<Basket>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ClearBasketReq {
+    #[prost(int64, tag = "1")]
+    pub user_id: i64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ClearBasketRes {
+    #[prost(bool, tag = "1")]
+    pub success: bool,
+}
+/// Generated client implementations.
+pub mod buy_history_service_client {
+    #![allow(
+        unused_variables,
+        dead_code,
+        missing_docs,
+        clippy::wildcard_imports,
+        clippy::let_unit_value,
+    )]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    #[derive(Debug, Clone)]
+    pub struct BuyHistoryServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl BuyHistoryServiceClient<tonic::transport::Channel> {
+        /// Attempt to create a new client by connecting to a given endpoint.
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        where
+            D: TryInto<tonic::transport::Endpoint>,
+            D::Error: Into<StdError>,
+        {
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
+        }
+    }
+    impl<T> BuyHistoryServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::Body>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + std::marker::Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + std::marker::Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> BuyHistoryServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::Body>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+            >>::Error: Into<StdError> + std::marker::Send + std::marker::Sync,
+        {
+            BuyHistoryServiceClient::new(InterceptedService::new(inner, interceptor))
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        pub async fn create_buy_record(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateBuyReq>,
+        ) -> std::result::Result<tonic::Response<super::BuyHistory>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/finance.BuyHistoryService/CreateBuyRecord",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("finance.BuyHistoryService", "CreateBuyRecord"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn get_buy_record(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetBuyReq>,
+        ) -> std::result::Result<tonic::Response<super::BuyHistory>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/finance.BuyHistoryService/GetBuyRecord",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("finance.BuyHistoryService", "GetBuyRecord"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn list_buy_history(
+            &mut self,
+            request: impl tonic::IntoRequest<super::ListBuyReq>,
+        ) -> std::result::Result<tonic::Response<super::ListBuyRes>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/finance.BuyHistoryService/ListBuyHistory",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("finance.BuyHistoryService", "ListBuyHistory"));
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}
+/// Generated client implementations.
+pub mod basket_service_client {
+    #![allow(
+        unused_variables,
+        dead_code,
+        missing_docs,
+        clippy::wildcard_imports,
+        clippy::let_unit_value,
+    )]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    #[derive(Debug, Clone)]
+    pub struct BasketServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl BasketServiceClient<tonic::transport::Channel> {
+        /// Attempt to create a new client by connecting to a given endpoint.
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        where
+            D: TryInto<tonic::transport::Endpoint>,
+            D::Error: Into<StdError>,
+        {
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
+        }
+    }
+    impl<T> BasketServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::Body>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + std::marker::Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + std::marker::Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> BasketServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::Body>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+            >>::Error: Into<StdError> + std::marker::Send + std::marker::Sync,
+        {
+            BasketServiceClient::new(InterceptedService::new(inner, interceptor))
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        pub async fn add_to_basket(
+            &mut self,
+            request: impl tonic::IntoRequest<super::AddToBasketReq>,
+        ) -> std::result::Result<tonic::Response<super::Basket>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/finance.BasketService/AddToBasket",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("finance.BasketService", "AddToBasket"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn remove_from_basket(
+            &mut self,
+            request: impl tonic::IntoRequest<super::RemoveFromBasketReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::RemoveFromBasketRes>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/finance.BasketService/RemoveFromBasket",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("finance.BasketService", "RemoveFromBasket"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn list_basket(
+            &mut self,
+            request: impl tonic::IntoRequest<super::ListBasketReq>,
+        ) -> std::result::Result<tonic::Response<super::ListBasketRes>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/finance.BasketService/ListBasket",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("finance.BasketService", "ListBasket"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn clear_basket(
+            &mut self,
+            request: impl tonic::IntoRequest<super::ClearBasketReq>,
+        ) -> std::result::Result<tonic::Response<super::ClearBasketRes>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/finance.BasketService/ClearBasket",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("finance.BasketService", "ClearBasket"));
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}

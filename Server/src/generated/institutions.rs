@@ -33,3 +33,491 @@ pub struct InstitutionMember {
     #[prost(message, optional, tag = "5")]
     pub joined_at: ::core::option::Option<::prost_types::Timestamp>,
 }
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct CreateInstitutionReq {
+    #[prost(int64, tag = "1")]
+    pub owner_user_id: i64,
+    #[prost(string, tag = "2")]
+    pub institution_name: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub institution_avatar: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub institution_type: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
+    pub institution_desc: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "6")]
+    pub metadata: ::core::option::Option<super::common::Meta>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetInstitutionReq {
+    #[prost(int64, tag = "1")]
+    pub institution_id: i64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateInstitutionReq {
+    #[prost(int64, tag = "1")]
+    pub institution_id: i64,
+    #[prost(string, tag = "2")]
+    pub institution_name: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub institution_avatar: ::prost::alloc::string::String,
+    #[prost(string, tag = "4")]
+    pub institution_type: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
+    pub institution_desc: ::prost::alloc::string::String,
+    #[prost(message, optional, tag = "6")]
+    pub metadata: ::core::option::Option<super::common::Meta>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct DeleteInstitutionReq {
+    #[prost(int64, tag = "1")]
+    pub institution_id: i64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct DeleteInstitutionRes {
+    #[prost(bool, tag = "1")]
+    pub success: bool,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListInstitutionsReq {
+    #[prost(int32, tag = "1")]
+    pub limit: i32,
+    #[prost(int32, tag = "2")]
+    pub offset: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListInstitutionsRes {
+    #[prost(message, repeated, tag = "1")]
+    pub items: ::prost::alloc::vec::Vec<Institution>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct AddMemberReq {
+    #[prost(int64, tag = "1")]
+    pub institution_id: i64,
+    #[prost(int64, tag = "2")]
+    pub user_id: i64,
+    #[prost(string, tag = "3")]
+    pub role_in_institution: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RemoveMemberReq {
+    #[prost(int64, tag = "1")]
+    pub inst_member_id: i64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RemoveMemberRes {
+    #[prost(bool, tag = "1")]
+    pub success: bool,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListMembersReq {
+    #[prost(int64, tag = "1")]
+    pub institution_id: i64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListMembersRes {
+    #[prost(message, repeated, tag = "1")]
+    pub items: ::prost::alloc::vec::Vec<InstitutionMember>,
+}
+/// Generated client implementations.
+pub mod institution_service_client {
+    #![allow(
+        unused_variables,
+        dead_code,
+        missing_docs,
+        clippy::wildcard_imports,
+        clippy::let_unit_value,
+    )]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    #[derive(Debug, Clone)]
+    pub struct InstitutionServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl InstitutionServiceClient<tonic::transport::Channel> {
+        /// Attempt to create a new client by connecting to a given endpoint.
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        where
+            D: TryInto<tonic::transport::Endpoint>,
+            D::Error: Into<StdError>,
+        {
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
+        }
+    }
+    impl<T> InstitutionServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::Body>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + std::marker::Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + std::marker::Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InstitutionServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::Body>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+            >>::Error: Into<StdError> + std::marker::Send + std::marker::Sync,
+        {
+            InstitutionServiceClient::new(InterceptedService::new(inner, interceptor))
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        pub async fn create_institution(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CreateInstitutionReq>,
+        ) -> std::result::Result<tonic::Response<super::Institution>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/institutions.InstitutionService/CreateInstitution",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "institutions.InstitutionService",
+                        "CreateInstitution",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn get_institution(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetInstitutionReq>,
+        ) -> std::result::Result<tonic::Response<super::Institution>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/institutions.InstitutionService/GetInstitution",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new("institutions.InstitutionService", "GetInstitution"),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn update_institution(
+            &mut self,
+            request: impl tonic::IntoRequest<super::UpdateInstitutionReq>,
+        ) -> std::result::Result<tonic::Response<super::Institution>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/institutions.InstitutionService/UpdateInstitution",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "institutions.InstitutionService",
+                        "UpdateInstitution",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn delete_institution(
+            &mut self,
+            request: impl tonic::IntoRequest<super::DeleteInstitutionReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::DeleteInstitutionRes>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/institutions.InstitutionService/DeleteInstitution",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "institutions.InstitutionService",
+                        "DeleteInstitution",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn list_institutions(
+            &mut self,
+            request: impl tonic::IntoRequest<super::ListInstitutionsReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::ListInstitutionsRes>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/institutions.InstitutionService/ListInstitutions",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "institutions.InstitutionService",
+                        "ListInstitutions",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}
+/// Generated client implementations.
+pub mod institution_member_service_client {
+    #![allow(
+        unused_variables,
+        dead_code,
+        missing_docs,
+        clippy::wildcard_imports,
+        clippy::let_unit_value,
+    )]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    #[derive(Debug, Clone)]
+    pub struct InstitutionMemberServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl InstitutionMemberServiceClient<tonic::transport::Channel> {
+        /// Attempt to create a new client by connecting to a given endpoint.
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        where
+            D: TryInto<tonic::transport::Endpoint>,
+            D::Error: Into<StdError>,
+        {
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
+        }
+    }
+    impl<T> InstitutionMemberServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::Body>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + std::marker::Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + std::marker::Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> InstitutionMemberServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::Body>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+            >>::Error: Into<StdError> + std::marker::Send + std::marker::Sync,
+        {
+            InstitutionMemberServiceClient::new(
+                InterceptedService::new(inner, interceptor),
+            )
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        pub async fn add_member(
+            &mut self,
+            request: impl tonic::IntoRequest<super::AddMemberReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::InstitutionMember>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/institutions.InstitutionMemberService/AddMember",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new("institutions.InstitutionMemberService", "AddMember"),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn remove_member(
+            &mut self,
+            request: impl tonic::IntoRequest<super::RemoveMemberReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::RemoveMemberRes>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/institutions.InstitutionMemberService/RemoveMember",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "institutions.InstitutionMemberService",
+                        "RemoveMember",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn list_members(
+            &mut self,
+            request: impl tonic::IntoRequest<super::ListMembersReq>,
+        ) -> std::result::Result<tonic::Response<super::ListMembersRes>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/institutions.InstitutionMemberService/ListMembers",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "institutions.InstitutionMemberService",
+                        "ListMembers",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}

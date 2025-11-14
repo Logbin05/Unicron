@@ -46,3 +46,689 @@ pub struct Certificate {
     #[prost(bool, tag = "6")]
     pub revoked: bool,
 }
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct EnrollReq {
+    #[prost(int64, tag = "1")]
+    pub user_id: i64,
+    #[prost(int64, tag = "2")]
+    pub course_id: i64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetEnrollmentReq {
+    #[prost(int64, tag = "1")]
+    pub enrollment_id: i64,
+}
+#[derive(Clone, Copy, PartialEq, ::prost::Message)]
+pub struct UpdateEnrollmentReq {
+    #[prost(int64, tag = "1")]
+    pub enrollment_id: i64,
+    #[prost(double, tag = "2")]
+    pub progress: f64,
+    #[prost(enumeration = "super::common::EnrollmentStatus", tag = "3")]
+    pub status: i32,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListEnrollmentsReq {
+    #[prost(int64, tag = "1")]
+    pub user_id: i64,
+    #[prost(int32, tag = "2")]
+    pub limit: i32,
+    #[prost(int32, tag = "3")]
+    pub offset: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListEnrollmentsRes {
+    #[prost(message, repeated, tag = "1")]
+    pub items: ::prost::alloc::vec::Vec<Enrollment>,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CompleteEnrollmentReq {
+    #[prost(int64, tag = "1")]
+    pub enrollment_id: i64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct CompleteEnrollmentRes {
+    #[prost(bool, tag = "1")]
+    pub success: bool,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct UpdateLessonProgressReq {
+    #[prost(int64, tag = "1")]
+    pub enrollment_id: i64,
+    #[prost(int64, tag = "2")]
+    pub lesson_id: i64,
+    #[prost(string, tag = "3")]
+    pub status: ::prost::alloc::string::String,
+    #[prost(double, tag = "4")]
+    pub progress: f64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetLessonProgressReq {
+    #[prost(int64, tag = "1")]
+    pub lp_id: i64,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListLessonProgressReq {
+    #[prost(int64, tag = "1")]
+    pub enrollment_id: i64,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListLessonProgressRes {
+    #[prost(message, repeated, tag = "1")]
+    pub items: ::prost::alloc::vec::Vec<LessonProgress>,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct IssueCertificateReq {
+    #[prost(int64, tag = "1")]
+    pub user_id: i64,
+    #[prost(int64, tag = "2")]
+    pub course_id: i64,
+    #[prost(message, optional, tag = "3")]
+    pub metadata: ::core::option::Option<super::common::Meta>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetCertificateReq {
+    #[prost(string, tag = "1")]
+    pub certificate_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RevokeCertificateReq {
+    #[prost(string, tag = "1")]
+    pub certificate_id: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct RevokeCertificateRes {
+    #[prost(bool, tag = "1")]
+    pub success: bool,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct ListCertificatesReq {
+    #[prost(int64, tag = "1")]
+    pub user_id: i64,
+    #[prost(int32, tag = "2")]
+    pub limit: i32,
+    #[prost(int32, tag = "3")]
+    pub offset: i32,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct ListCertificatesRes {
+    #[prost(message, repeated, tag = "1")]
+    pub items: ::prost::alloc::vec::Vec<Certificate>,
+}
+/// Generated client implementations.
+pub mod enrollment_service_client {
+    #![allow(
+        unused_variables,
+        dead_code,
+        missing_docs,
+        clippy::wildcard_imports,
+        clippy::let_unit_value,
+    )]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    /// # =====================
+    /// SERVICES
+    #[derive(Debug, Clone)]
+    pub struct EnrollmentServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl EnrollmentServiceClient<tonic::transport::Channel> {
+        /// Attempt to create a new client by connecting to a given endpoint.
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        where
+            D: TryInto<tonic::transport::Endpoint>,
+            D::Error: Into<StdError>,
+        {
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
+        }
+    }
+    impl<T> EnrollmentServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::Body>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + std::marker::Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + std::marker::Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> EnrollmentServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::Body>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+            >>::Error: Into<StdError> + std::marker::Send + std::marker::Sync,
+        {
+            EnrollmentServiceClient::new(InterceptedService::new(inner, interceptor))
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        pub async fn enroll(
+            &mut self,
+            request: impl tonic::IntoRequest<super::EnrollReq>,
+        ) -> std::result::Result<tonic::Response<super::Enrollment>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/progress.EnrollmentService/Enroll",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("progress.EnrollmentService", "Enroll"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn get_enrollment(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetEnrollmentReq>,
+        ) -> std::result::Result<tonic::Response<super::Enrollment>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/progress.EnrollmentService/GetEnrollment",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("progress.EnrollmentService", "GetEnrollment"));
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn update_enrollment(
+            &mut self,
+            request: impl tonic::IntoRequest<super::UpdateEnrollmentReq>,
+        ) -> std::result::Result<tonic::Response<super::Enrollment>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/progress.EnrollmentService/UpdateEnrollment",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new("progress.EnrollmentService", "UpdateEnrollment"),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn list_enrollments(
+            &mut self,
+            request: impl tonic::IntoRequest<super::ListEnrollmentsReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::ListEnrollmentsRes>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/progress.EnrollmentService/ListEnrollments",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new("progress.EnrollmentService", "ListEnrollments"),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn complete_enrollment(
+            &mut self,
+            request: impl tonic::IntoRequest<super::CompleteEnrollmentReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::CompleteEnrollmentRes>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/progress.EnrollmentService/CompleteEnrollment",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new("progress.EnrollmentService", "CompleteEnrollment"),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}
+/// Generated client implementations.
+pub mod lesson_progress_service_client {
+    #![allow(
+        unused_variables,
+        dead_code,
+        missing_docs,
+        clippy::wildcard_imports,
+        clippy::let_unit_value,
+    )]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    #[derive(Debug, Clone)]
+    pub struct LessonProgressServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl LessonProgressServiceClient<tonic::transport::Channel> {
+        /// Attempt to create a new client by connecting to a given endpoint.
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        where
+            D: TryInto<tonic::transport::Endpoint>,
+            D::Error: Into<StdError>,
+        {
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
+        }
+    }
+    impl<T> LessonProgressServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::Body>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + std::marker::Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + std::marker::Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> LessonProgressServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::Body>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+            >>::Error: Into<StdError> + std::marker::Send + std::marker::Sync,
+        {
+            LessonProgressServiceClient::new(InterceptedService::new(inner, interceptor))
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        pub async fn update_lesson_progress(
+            &mut self,
+            request: impl tonic::IntoRequest<super::UpdateLessonProgressReq>,
+        ) -> std::result::Result<tonic::Response<super::LessonProgress>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/progress.LessonProgressService/UpdateLessonProgress",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "progress.LessonProgressService",
+                        "UpdateLessonProgress",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn get_lesson_progress(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetLessonProgressReq>,
+        ) -> std::result::Result<tonic::Response<super::LessonProgress>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/progress.LessonProgressService/GetLessonProgress",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "progress.LessonProgressService",
+                        "GetLessonProgress",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn list_lesson_progress_by_enrollment(
+            &mut self,
+            request: impl tonic::IntoRequest<super::ListLessonProgressReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::ListLessonProgressRes>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/progress.LessonProgressService/ListLessonProgressByEnrollment",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new(
+                        "progress.LessonProgressService",
+                        "ListLessonProgressByEnrollment",
+                    ),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}
+/// Generated client implementations.
+pub mod certificate_service_client {
+    #![allow(
+        unused_variables,
+        dead_code,
+        missing_docs,
+        clippy::wildcard_imports,
+        clippy::let_unit_value,
+    )]
+    use tonic::codegen::*;
+    use tonic::codegen::http::Uri;
+    #[derive(Debug, Clone)]
+    pub struct CertificateServiceClient<T> {
+        inner: tonic::client::Grpc<T>,
+    }
+    impl CertificateServiceClient<tonic::transport::Channel> {
+        /// Attempt to create a new client by connecting to a given endpoint.
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        where
+            D: TryInto<tonic::transport::Endpoint>,
+            D::Error: Into<StdError>,
+        {
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
+        }
+    }
+    impl<T> CertificateServiceClient<T>
+    where
+        T: tonic::client::GrpcService<tonic::body::Body>,
+        T::Error: Into<StdError>,
+        T::ResponseBody: Body<Data = Bytes> + std::marker::Send + 'static,
+        <T::ResponseBody as Body>::Error: Into<StdError> + std::marker::Send,
+    {
+        pub fn new(inner: T) -> Self {
+            let inner = tonic::client::Grpc::new(inner);
+            Self { inner }
+        }
+        pub fn with_origin(inner: T, origin: Uri) -> Self {
+            let inner = tonic::client::Grpc::with_origin(inner, origin);
+            Self { inner }
+        }
+        pub fn with_interceptor<F>(
+            inner: T,
+            interceptor: F,
+        ) -> CertificateServiceClient<InterceptedService<T, F>>
+        where
+            F: tonic::service::Interceptor,
+            T::ResponseBody: Default,
+            T: tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+                Response = http::Response<
+                    <T as tonic::client::GrpcService<tonic::body::Body>>::ResponseBody,
+                >,
+            >,
+            <T as tonic::codegen::Service<
+                http::Request<tonic::body::Body>,
+            >>::Error: Into<StdError> + std::marker::Send + std::marker::Sync,
+        {
+            CertificateServiceClient::new(InterceptedService::new(inner, interceptor))
+        }
+        /// Compress requests with the given encoding.
+        ///
+        /// This requires the server to support it otherwise it might respond with an
+        /// error.
+        #[must_use]
+        pub fn send_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.send_compressed(encoding);
+            self
+        }
+        /// Enable decompressing responses.
+        #[must_use]
+        pub fn accept_compressed(mut self, encoding: CompressionEncoding) -> Self {
+            self.inner = self.inner.accept_compressed(encoding);
+            self
+        }
+        /// Limits the maximum size of a decoded message.
+        ///
+        /// Default: `4MB`
+        #[must_use]
+        pub fn max_decoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_decoding_message_size(limit);
+            self
+        }
+        /// Limits the maximum size of an encoded message.
+        ///
+        /// Default: `usize::MAX`
+        #[must_use]
+        pub fn max_encoding_message_size(mut self, limit: usize) -> Self {
+            self.inner = self.inner.max_encoding_message_size(limit);
+            self
+        }
+        pub async fn issue_certificate(
+            &mut self,
+            request: impl tonic::IntoRequest<super::IssueCertificateReq>,
+        ) -> std::result::Result<tonic::Response<super::Certificate>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/progress.CertificateService/IssueCertificate",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new("progress.CertificateService", "IssueCertificate"),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn get_certificate(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetCertificateReq>,
+        ) -> std::result::Result<tonic::Response<super::Certificate>, tonic::Status> {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/progress.CertificateService/GetCertificate",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new("progress.CertificateService", "GetCertificate"),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn revoke_certificate(
+            &mut self,
+            request: impl tonic::IntoRequest<super::RevokeCertificateReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::RevokeCertificateRes>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/progress.CertificateService/RevokeCertificate",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new("progress.CertificateService", "RevokeCertificate"),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+        pub async fn list_certificates(
+            &mut self,
+            request: impl tonic::IntoRequest<super::ListCertificatesReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::ListCertificatesRes>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/progress.CertificateService/ListCertificates",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(
+                    GrpcMethod::new("progress.CertificateService", "ListCertificates"),
+                );
+            self.inner.unary(req, path, codec).await
+        }
+    }
+}
