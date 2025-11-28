@@ -31,3 +31,72 @@ message Certificate {
   common.Meta metadata = 5;
   bool revoked = 6;
 }
+
+// =====================
+//      SERVICES
+// =====================
+service EnrollmentService {
+  rpc Enroll(EnrollReq) returns (Enrollment);
+  rpc GetEnrollment(GetEnrollmentReq) returns (Enrollment);
+  rpc UpdateEnrollment(UpdateEnrollmentReq) returns (Enrollment);
+  rpc ListEnrollments(ListEnrollmentsReq) returns (ListEnrollmentsRes);
+  rpc CompleteEnrollment(CompleteEnrollmentReq) returns (CompleteEnrollmentRes);
+}
+
+service LessonProgressService {
+  rpc UpdateLessonProgress(UpdateLessonProgressReq) returns (LessonProgress);
+  rpc GetLessonProgress(GetLessonProgressReq) returns (LessonProgress);
+  rpc ListLessonProgressByEnrollment(ListLessonProgressReq) returns (ListLessonProgressRes);
+}
+
+service CertificateService {
+  rpc IssueCertificate(IssueCertificateReq) returns (Certificate);
+  rpc GetCertificate(GetCertificateReq) returns (Certificate);
+  rpc RevokeCertificate(RevokeCertificateReq) returns (RevokeCertificateRes);
+  rpc ListCertificates(ListCertificatesReq) returns (ListCertificatesRes);
+}
+
+
+message EnrollReq {
+  int64 user_id = 1;
+  int64 course_id = 2;
+}
+message GetEnrollmentReq { int64 enrollment_id = 1; }
+message UpdateEnrollmentReq {
+  int64 enrollment_id = 1;
+  double progress = 2;
+  common.EnrollmentStatus status = 3;
+}
+message ListEnrollmentsReq {
+  int64 user_id = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}
+message ListEnrollmentsRes { repeated Enrollment items = 1; }
+message CompleteEnrollmentReq { int64 enrollment_id = 1; }
+message CompleteEnrollmentRes { bool success = 1; }
+
+message UpdateLessonProgressReq {
+  int64 enrollment_id = 1;
+  int64 lesson_id = 2;
+  string status = 3;
+  double progress = 4;
+}
+message GetLessonProgressReq { int64 lp_id = 1; }
+message ListLessonProgressReq { int64 enrollment_id = 1; }
+message ListLessonProgressRes { repeated LessonProgress items = 1; }
+
+message IssueCertificateReq {
+  int64 user_id = 1;
+  int64 course_id = 2;
+  common.Meta metadata = 3;
+}
+message GetCertificateReq { string certificate_id = 1; }
+message RevokeCertificateReq { string certificate_id = 1; }
+message RevokeCertificateRes { bool success = 1; }
+message ListCertificatesReq {
+  int64 user_id = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}
+message ListCertificatesRes { repeated Certificate items = 1; }

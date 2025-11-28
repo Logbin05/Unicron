@@ -25,3 +25,57 @@ message Service {
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp updated_at = 8;
 }
+
+service SubscriptionService {
+  rpc CreateSubscription(CreateSubscriptionReq) returns (Subscription);
+  rpc GetSubscription(GetSubscriptionReq) returns (Subscription);
+  rpc ListSubscriptions(ListSubscriptionsReq) returns (ListSubscriptionsRes);
+  rpc CancelSubscription(CancelSubscriptionReq) returns (CancelSubscriptionRes);
+}
+
+service ServiceService {
+  rpc CreateService(CreateServiceReq) returns (Service);
+  rpc GetService(GetServiceReq) returns (Service);
+  rpc ListServices(ListServicesReq) returns (ListServicesRes);
+  rpc UpdateService(UpdateServiceReq) returns (Service);
+  rpc DeleteService(DeleteServiceReq) returns (DeleteServiceRes);
+}
+
+message CreateSubscriptionReq {
+  int64 user_id = 1;
+  int64 sub_item_id = 2;
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
+}
+message GetSubscriptionReq { int64 sub_id = 1; }
+message ListSubscriptionsReq {
+  int64 user_id = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}
+message ListSubscriptionsRes { repeated Subscription items = 1; }
+message CancelSubscriptionReq { int64 sub_id = 1; }
+message CancelSubscriptionRes { bool success = 1; }
+
+message CreateServiceReq {
+  int64 course_id = 1;
+  int64 sub_id = 2;
+  string sku = 3;
+  string title = 4;
+  double price = 5;
+}
+message GetServiceReq { int64 service_id = 1; }
+message ListServicesReq {
+  int64 course_id = 1;
+  int32 limit = 2;
+  int32 offset = 3;
+}
+message ListServicesRes { repeated Service items = 1; }
+message UpdateServiceReq {
+  int64 service_id = 1;
+  string sku = 2;
+  string title = 3;
+  double price = 4;
+}
+message DeleteServiceReq { int64 service_id = 1; }
+message DeleteServiceRes { bool success = 1; }

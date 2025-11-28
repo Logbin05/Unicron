@@ -6,7 +6,7 @@ import type { Enrollments } from "@entities/data/course";
 import avatar from "@assets/image/logo.png";
 import { BiCheckShield } from "react-icons/bi";
 import { IoWarningOutline } from "react-icons/io5";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { EnrollmentStatus, SubscriptionStatus } from "@entities/data/enums";
 
 const mockUser: User = {
@@ -15,7 +15,7 @@ const mockUser: User = {
   email: "joendue@gmail.com",
   login: "joendue",
   avatar: "../assets/image/logo.png",
-  is_verified: false,
+  is_verified: true,
   role_id: 3,
   uf_id: 1,
   created_at: "2024-02-15",
@@ -41,6 +41,7 @@ const mockSubscription: Subscriptions = {
   created_at: "2025-01-01",
   updated_at: "2025-01-01",
 };
+
 const mockEnrollments: Enrollments[] = [
   {
     enrollments_id: 1,
@@ -68,133 +69,119 @@ export function MyProfilePage() {
   useEffect(() => setRoleName(mockRole.role_name), []);
 
   return (
-    <section
-      className="bg-fourth flex justify-center
-    xs:mx-3 sm:mx-5 md:mx-10 lg:mx-20 xl:mx-32 2k:mx-48 4k:mx-64 my-6
-    xs:rounded-md lg:rounded-lg p-4 xs:p-6 sm:p-8 lg:p-10 xl:p-12 2k:p-16"
-    >
+    <section className="w-full flex justify-center rounded-tl-2xl
+      rounded-bl-2x bg-fourth py-16 px-6 lg:px-20">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="flex flex-col lg:flex-row gap-8 w-full max-w-[1920px] mx-auto"
+        transition={{ duration: 0.6 }}
+        className="grid w-full max-w-[1600px] grid-cols-1 lg:grid-cols-3 gap-12"
       >
         <motion.div
-          className="flex flex-col items-center lg:items-start gap-6"
-          whileHover={{ scale: 1.05 }}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center lg:items-start gap-8 bg-fifth/40 p-8 rounded-3xl
+          shadow-xl backdrop-blur-md border border-white/10"
         >
-          <div
-            className="relative rounded-full overflow-hidden shadow-2xl border-4
-          border-fifth
-          w-28 xs:w-32 sm:w-36 md:w-40 lg:w-44 xl:w-48 2k:w-52 4k:w-64 h-28
-          xs:h-32 sm:h-36 md:h-40 lg:h-44 xl:h-48 2k:h-52 4k:h-64"
-          >
-            <img
-              src={avatar}
-              alt={mockUser.login}
-              className="object-cover xs:size-full"
-            />
+          <motion.div whileHover={{ scale: 1.05 }} className="relative">
+            <div className="rounded-full overflow-hidden shadow-2xl border-4 border-fifth w-44 h-44">
+              <img
+                src={avatar}
+                alt={mockUser.login}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
             {!mockUser.is_verified && (
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-                className="absolute -bottom-2 -right-2 bg-red-500 rounded-full w-8 h-8
-                flex items-center justify-center shadow-lg"
+                transition={{ duration: 0.4 }}
+                className="absolute -bottom-3 -right-3 bg-red-500 p-3 rounded-full shadow-xl"
               >
-                <IoWarningOutline className="text-white text-lg" />
+                <IoWarningOutline className="text-white text-2xl" />
               </motion.div>
             )}
-          </div>
-          <h2
-            className="font-Tektur text-25 xs:text-28 sm:text-33 lg:text-36 xl:text-42 2k:text-42
-          text-sixth text-center lg:text-left"
-          >
+          </motion.div>
+
+          <h2 className="font-Tektur text-4xl text-sixth text-center lg:text-left drop-shadow-lg">
             {mockUser.full_name}
           </h2>
-        </motion.div>
 
-        <div className="flex flex-col gap-6 lg:gap-8 flex-1">
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className={`flex items-center gap-3 font-Jura px-5 py-3 rounded-3xl shadow-xl text-lg
+            transition={{ duration: 0.4 }}
+            className={`flex items-center gap-3 font-Jura px-6 py-3 rounded-2xl text-xl shadow-lg backdrop-blur-lg border
               ${
                 mockUser.is_verified
-                  ? `bg-linear-to-r from-emerald-400/30 via-emerald-500/20
-                    to-emerald-400/30 text-fifth shadow-emerald-400/40`
-                  : `bg-linear-to-r from-red-400/30 via-red-500/20 to-red-400/30 text-red-400 shadow-red-400/40`
+                  ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
+                  : "bg-red-500/20 text-red-400 border-red-500/40"
               }`}
           >
             {mockUser.is_verified ? (
-              <BiCheckShield className="text-2xl" />
+              <BiCheckShield className="text-3xl" />
             ) : (
-              <IoWarningOutline className="text-2xl" />
+              <IoWarningOutline className="text-3xl" />
             )}
             <span>
-              {mockUser.is_verified
-                ? "You are verified"
-                : "You are not verified"}
+              {mockUser.is_verified ? "Verified User" : "Not Verified"}
             </span>
           </motion.div>
+        </motion.div>
 
-          <div className="grid xs:grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="bg-fifth p-4 rounded-2xl shadow-md text-sixth"
-            >
-              <span className="font-semibold">Email:</span> {mockUser.email}
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="bg-fifth p-4 rounded-2xl shadow-md text-sixth"
-            >
-              <span className="font-semibold">Login:</span> {mockUser.login}
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="bg-fifth p-4 rounded-2xl shadow-md text-sixth"
-            >
-              <span className="font-semibold">Role:</span> {roleName}
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="bg-fifth p-4 rounded-2xl shadow-md text-sixth"
-            >
-              <span className="font-semibold">UF ID:</span> {mockUser.uf_id}
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="bg-fifth p-4 rounded-2xl shadow-md text-sixth"
-            >
-              <span className="font-semibold">Balance:</span>{" "}
-              {mockFinance.balance} {mockFinance.currency}
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="bg-fifth p-4 rounded-2xl shadow-md text-sixth"
-            >
-              <span className="font-semibold">Subscription:</span>{" "}
-              {mockSubscription.status} ({mockSubscription.start_date} -{" "}
-              {mockSubscription.end_date})
-            </motion.div>
+        <div className="lg:col-span-2 flex flex-col gap-12">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { label: "Email", value: mockUser.email },
+              { label: "Login", value: mockUser.login },
+              { label: "Role", value: roleName },
+              { label: "UF ID", value: mockUser.uf_id },
+              {
+                label: "Balance",
+                value: `${mockFinance.balance} ${mockFinance.currency}`,
+              },
+              {
+                label: "Subscription",
+                value: `${mockSubscription.status} (${mockSubscription.start_date} → ${mockSubscription.end_date})`,
+              },
+            ].map((item, idx) => (
+              <motion.div
+                key={idx}
+                whileHover={{ scale: 1.04 }}
+                className="bg-fifth/60 rounded-2xl p-5 shadow-xl text-sixth font-Jura backdrop-blur-lg border border-white/10"
+              >
+                <span className="block font-semibold mb-1 text-lg opacity-70">
+                  {item.label}:
+                </span>
+                <span className="text-xl font-light">{item.value}</span>
+              </motion.div>
+            ))}
           </div>
 
-          <div className="flex flex-col gap-4 mt-4">
-            <h3 className="font-Tektur text-22 text-sixth">Course Progress</h3>
+          <div className="flex flex-col gap-5">
+            <h3 className="font-Tektur text-3xl text-sixth drop-shadow-lg tracking-wide">
+              Course Progress
+            </h3>
+
             {mockEnrollments.map((e, idx) => (
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: idx * 0.2 }}
+                transition={{ delay: idx * 0.15 }}
+                className="bg-fifth/40 border border-white/10 p-4 rounded-xl shadow-lg backdrop-blur-lg"
               >
-                <span className="text-sixth font-Jura">{`Course ${e.course_id} - ${e.progress}% (${e.status})`}</span>
-                <div className="w-full h-4 bg-third rounded-xl mt-1 overflow-hidden">
-                  <div
+                <span className="text-sixth font-Jura text-lg">
+                  {`Course ${e.course_id} • ${e.progress}% • ${e.status}`}
+                </span>
+                <div className="w-full h-4 bg-third rounded-xl mt-2 overflow-hidden shadow-inner">
+                  <motion.div
                     className="h-full bg-fifth rounded-xl"
-                    style={{ width: `${e.progress}%` }}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${e.progress}%` }}
+                    transition={{ duration: 0.8, delay: idx * 0.1 }}
                   />
                 </div>
               </motion.div>

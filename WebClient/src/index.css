@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: 'Tektur';
+  font-family: "Tektur";
   src: url(../public/fonts/Tektur.woff2) format(woff2);
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Jura';
+  font-family: "Jura";
   src: url(../public/fonts/Jura.woff2) format(woff2);
   font-style: normal;
 }
@@ -20,8 +20,8 @@
   --color-fifth: oklch(0.7395 0.058 155.23);
   --color-sixth: oklch(0.9361 0.0351 150.54);
 
-  --font-Tektur: 'Tektur';
-  --font-Jura: 'Jura';
+  --font-Tektur: "Tektur";
+  --font-Jura: "Jura";
 
   --text-42: 3.425rem;
   --text-36: 2.2025rem;

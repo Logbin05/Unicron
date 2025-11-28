@@ -56,3 +56,155 @@ message Assignment {
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp updated_at = 8;
 }
+
+service CategoryService {
+  rpc CreateCategory(CreateCategoryReq) returns (Category);
+  rpc GetCategory(GetCategoryReq) returns (Category);
+  rpc ListCategories(ListCategoriesReq) returns (ListCategoriesRes);
+  rpc UpdateCategory(UpdateCategoryReq) returns (Category);
+  rpc DeleteCategory(DeleteCategoryReq) returns (DeleteCategoryRes);
+}
+
+service CourseService {
+  rpc CreateCourse(CreateCourseReq) returns (Course);
+  rpc GetCourse(GetCourseReq) returns (Course);
+  rpc ListCourses(ListCoursesReq) returns (ListCoursesRes);
+  rpc UpdateCourse(UpdateCourseReq) returns (Course);
+  rpc DeleteCourse(DeleteCourseReq) returns (DeleteCourseRes);
+
+  rpc ListCoursesByCategory(ListCoursesByCategoryReq) returns (ListCoursesRes);
+  rpc ListCoursesByInstitution(ListCoursesByInstitutionReq) returns (ListCoursesRes);
+}
+
+
+service ModuleService {
+  rpc CreateModule(CreateModuleReq) returns (Module);
+  rpc GetModule(GetModuleReq) returns (Module);
+  rpc ListModulesByCourse(ListModulesByCourseReq) returns (ListModulesRes);
+  rpc UpdateModule(UpdateModuleReq) returns (Module);
+  rpc DeleteModule(DeleteModuleReq) returns (DeleteModuleRes);
+}
+
+service LessonService {
+  rpc CreateLesson(CreateLessonReq) returns (Lesson);
+  rpc GetLesson(GetLessonReq) returns (Lesson);
+  rpc ListLessonsByModule(ListLessonsByModuleReq) returns (ListLessonsRes);
+  rpc UpdateLesson(UpdateLessonReq) returns (Lesson);
+  rpc DeleteLesson(DeleteLessonReq) returns (DeleteLessonRes);
+}
+
+service AssignmentService {
+  rpc CreateAssignment(CreateAssignmentReq) returns (Assignment);
+  rpc GetAssignment(GetAssignmentReq) returns (Assignment);
+  rpc ListAssignmentsByLesson(ListAssignmentsByLessonReq) returns (ListAssignmentsRes);
+  rpc UpdateAssignment(UpdateAssignmentReq) returns (Assignment);
+  rpc DeleteAssignment(DeleteAssignmentReq) returns (DeleteAssignmentRes);
+}
+
+message CreateCategoryReq {
+  string category_name = 1;
+  string category_desc = 2;
+}
+message GetCategoryReq { int64 category_id = 1; }
+message ListCategoriesReq {}
+message ListCategoriesRes { repeated Category items = 1; }
+message UpdateCategoryReq {
+  int64 category_id = 1;
+  string category_name = 2;
+  string category_desc = 3;
+}
+message DeleteCategoryReq { int64 category_id = 1; }
+message DeleteCategoryRes { bool success = 1; }
+
+message CreateCourseReq {
+  int64 institution_id = 1;
+  int64 author_id = 2;
+  int64 category_id = 3;
+  string course_name = 4;
+  string course_slug = 5;
+  string course_desc = 6;
+  string course_image = 7;
+  double price = 8;
+  bool is_published = 9;
+  common.Visibility visibility = 10;
+}
+message GetCourseReq { int64 course_id = 1; }
+message ListCoursesReq {
+  int32 limit = 1;
+  int32 offset = 2;
+}
+message ListCoursesRes { repeated Course items = 1; }
+message UpdateCourseReq {
+  int64 course_id = 1;
+  string course_name = 2;
+  string course_slug = 3;
+  string course_desc = 4;
+  string course_image = 5;
+  double price = 6;
+  bool is_published = 7;
+  common.Visibility visibility = 8;
+}
+message DeleteCourseReq { int64 course_id = 1; }
+message DeleteCourseRes { bool success = 1; }
+message ListCoursesByCategoryReq { int64 category_id = 1; }
+message ListCoursesByInstitutionReq { int64 institution_id = 1; }
+
+message CreateModuleReq {
+  int64 course_id = 1;
+  string title = 2;
+  string description = 3;
+  int32 order = 4;
+}
+message GetModuleReq { int64 module_id = 1; }
+message ListModulesByCourseReq { int64 course_id = 1; }
+message ListModulesRes { repeated Module items = 1; }
+message UpdateModuleReq {
+  int64 module_id = 1;
+  string title = 2;
+  string description = 3;
+  int32 order = 4;
+}
+message DeleteModuleReq { int64 module_id = 1; }
+message DeleteModuleRes { bool success = 1; }
+
+message CreateLessonReq {
+  int64 module_id = 1;
+  string title = 2;
+  string content_type = 3;
+  string content_ref = 4;
+  int32 duration_seconds = 5;
+  int32 position = 6;
+}
+message GetLessonReq { int64 lesson_id = 1; }
+message ListLessonsByModuleReq { int64 module_id = 1; }
+message ListLessonsRes { repeated Lesson items = 1; }
+message UpdateLessonReq {
+  int64 lesson_id = 1;
+  string title = 2;
+  string content_type = 3;
+  string content_ref = 4;
+  int32 duration_seconds = 5;
+  int32 position = 6;
+}
+message DeleteLessonReq { int64 lesson_id = 1; }
+message DeleteLessonRes { bool success = 1; }
+
+message CreateAssignmentReq {
+  int64 lesson_id = 1;
+  string title = 2;
+  string kind = 3;
+  common.Meta config = 4;
+  double max_score = 5;
+}
+message GetAssignmentReq { int64 assignment_id = 1; }
+message ListAssignmentsByLessonReq { int64 lesson_id = 1; }
+message ListAssignmentsRes { repeated Assignment items = 1; }
+message UpdateAssignmentReq {
+  int64 assignment_id = 1;
+  string title = 2;
+  string kind = 3;
+  common.Meta config = 4;
+  double max_score = 5;
+}
+message DeleteAssignmentReq { int64 assignment_id = 1; }
+message DeleteAssignmentRes { bool success = 1; }
