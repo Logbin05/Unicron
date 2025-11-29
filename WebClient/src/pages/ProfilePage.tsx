@@ -1,20 +1,24 @@
+import { motion } from "framer-motion";
+import { HiUser } from "react-icons/hi2";
+import { BsBank2 } from "react-icons/bs";
 import { useEffect, useState } from "react";
+import avatar from "@assets/image/avatar.jpeg";
+import { BiCheckShield } from "react-icons/bi";
 import type { User } from "@entities/data/user";
 import type { UsersFinances } from "@entities/data/user";
-import type { Subscriptions } from "@entities/data/subscriptions";
 import type { Enrollments } from "@entities/data/course";
-import avatar from "@assets/image/logo.png";
-import { BiCheckShield } from "react-icons/bi";
-import { IoWarningOutline } from "react-icons/io5";
-import { motion } from "framer-motion";
+import { HiMail, HiUserGroup } from "react-icons/hi";
+import { IoCardOutline, IoWarningOutline } from "react-icons/io5";
+import type { Subscriptions } from "@entities/data/subscriptions";
 import { EnrollmentStatus, SubscriptionStatus } from "@entities/data/enums";
+import { MdOutlineWorkspacePremium } from "react-icons/md";
 
 const mockUser: User = {
   user_id: 1,
-  full_name: "Joen Doe",
-  email: "joendue@gmail.com",
-  login: "joendue",
-  avatar: "../assets/image/logo.png",
+  full_name: "Alexey Logbinov",
+  email: "logbinov@none.com",
+  login: "logbinov",
+  avatar: avatar,
   is_verified: true,
   role_id: 3,
   uf_id: 1,
@@ -27,7 +31,7 @@ const mockFinance: UsersFinances = {
   uf_id: 1,
   card_id: 1234,
   currency: "USD",
-  balance: 120.5,
+  balance: 1535.5,
   created_at: "2024-02-15",
   updated_at: "2025-05-01",
 };
@@ -35,8 +39,8 @@ const mockSubscription: Subscriptions = {
   sub_id: 1,
   user_id: 1,
   sub_item: 1,
-  start_date: "2025-01-01",
-  end_date: "2025-12-31",
+  start_date: "01.01.2025",
+  end_date: "31.12.2025",
   status: SubscriptionStatus.ACTIVE,
   created_at: "2025-01-01",
   updated_at: "2025-01-01",
@@ -47,10 +51,10 @@ const mockEnrollments: Enrollments[] = [
     enrollments_id: 1,
     user_id: 1,
     course_id: 1,
-    progress: 75,
-    status: EnrollmentStatus.ENROLLED,
-    started_at: "2025-02-01",
-    complected_at: "",
+    progress: 100,
+    status: EnrollmentStatus.COMPLETED,
+    started_at: "01.02.2025",
+    complected_at: "01.04.2025",
   },
   {
     enrollments_id: 2,
@@ -59,7 +63,16 @@ const mockEnrollments: Enrollments[] = [
     progress: 100,
     status: EnrollmentStatus.COMPLETED,
     started_at: "2025-01-01",
-    complected_at: "2025-03-01",
+    complected_at: "01.03.2025",
+  },
+  {
+    enrollments_id: 3,
+    user_id: 1,
+    course_id: 3,
+    progress: 0,
+    status: EnrollmentStatus.ENROLLED,
+    started_at: "2025-11-30",
+    complected_at: "",
   },
 ];
 
@@ -69,8 +82,10 @@ export function MyProfilePage() {
   useEffect(() => setRoleName(mockRole.role_name), []);
 
   return (
-    <section className="w-full flex justify-center rounded-tl-2xl
-      rounded-bl-2x bg-fourth py-16 px-6 lg:px-20">
+    <section
+      className="w-full flex justify-center rounded-tl-2xl
+      rounded-bl-2x bg-fourth py-16 px-6 lg:px-20"
+    >
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -126,7 +141,7 @@ export function MyProfilePage() {
               <IoWarningOutline className="text-3xl" />
             )}
             <span>
-              {mockUser.is_verified ? "Verified User" : "Not Verified"}
+              {mockUser.is_verified ? "Your verified" : "Not Verified"}
             </span>
           </motion.div>
         </motion.div>
@@ -134,17 +149,20 @@ export function MyProfilePage() {
         <div className="lg:col-span-2 flex flex-col gap-12">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              { label: "Email", value: mockUser.email },
-              { label: "Login", value: mockUser.login },
-              { label: "Role", value: roleName },
-              { label: "UF ID", value: mockUser.uf_id },
+              { label: "Email", value: mockUser.email, icon: <HiMail /> },
+              { label: "Login", value: mockUser.login, icon: <HiUser /> },
+              { label: "Role", value: roleName, icon: <HiUserGroup /> },
+              { label: "UF ID", value: mockUser.uf_id, icon: <BsBank2 /> },
               {
                 label: "Balance",
                 value: `${mockFinance.balance} ${mockFinance.currency}`,
+                icon: <IoCardOutline />,
               },
               {
                 label: "Subscription",
-                value: `${mockSubscription.status} (${mockSubscription.start_date} → ${mockSubscription.end_date})`,
+                status: `${mockSubscription.status}`,
+                value: `${mockSubscription.start_date} → ${mockSubscription.end_date}`,
+                icon: <MdOutlineWorkspacePremium />,
               },
             ].map((item, idx) => (
               <motion.div
@@ -152,8 +170,9 @@ export function MyProfilePage() {
                 whileHover={{ scale: 1.04 }}
                 className="bg-fifth/60 rounded-2xl p-5 shadow-xl text-sixth font-Jura backdrop-blur-lg border border-white/10"
               >
-                <span className="block font-semibold mb-1 text-lg opacity-70">
-                  {item.label}:
+                <span className="font-semibold mb-1 flex flex-row items-center text-lg opacity-70">
+                  {item.icon}
+                  {item.label}: &nbsp;{item.status}
                 </span>
                 <span className="text-xl font-light">{item.value}</span>
               </motion.div>
@@ -162,7 +181,7 @@ export function MyProfilePage() {
 
           <div className="flex flex-col gap-5">
             <h3 className="font-Tektur text-3xl text-sixth drop-shadow-lg tracking-wide">
-              Course Progress
+              Last Progress
             </h3>
 
             {mockEnrollments.map((e, idx) => (
