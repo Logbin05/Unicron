@@ -1,89 +1,34 @@
+import {
+  mockRole,
+  mockUser,
+  mockFinance,
+  mockSubscription,
+  mockEnrollments,
+} from "@mock/data";
 import { motion } from "framer-motion";
 import { HiUser } from "react-icons/hi2";
-import { BsBank2 } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import avatar from "@assets/image/avatar.jpeg";
 import { BiCheckShield } from "react-icons/bi";
-import type { User } from "@entities/data/user";
-import type { UsersFinances } from "@entities/data/user";
-import type { Enrollments } from "@entities/data/course";
+import { RiVipCrownFill } from "react-icons/ri";
 import { HiMail, HiUserGroup } from "react-icons/hi";
-import { IoCardOutline, IoWarningOutline } from "react-icons/io5";
-import type { Subscriptions } from "@entities/data/subscriptions";
-import { EnrollmentStatus, SubscriptionStatus } from "@entities/data/enums";
-import { MdOutlineWorkspacePremium } from "react-icons/md";
-
-const mockUser: User = {
-  user_id: 1,
-  full_name: "Alexey Logbinov",
-  email: "logbinov@none.com",
-  login: "logbinov",
-  avatar: avatar,
-  is_verified: true,
-  role_id: 3,
-  uf_id: 1,
-  created_at: "2024-02-15",
-  updated_at: "2025-05-01",
-};
-
-const mockRole = { role_id: 3, role_name: "Student" };
-const mockFinance: UsersFinances = {
-  uf_id: 1,
-  card_id: 1234,
-  currency: "USD",
-  balance: 1535.5,
-  created_at: "2024-02-15",
-  updated_at: "2025-05-01",
-};
-const mockSubscription: Subscriptions = {
-  sub_id: 1,
-  user_id: 1,
-  sub_item: 1,
-  start_date: "01.01.2025",
-  end_date: "31.12.2025",
-  status: SubscriptionStatus.ACTIVE,
-  created_at: "2025-01-01",
-  updated_at: "2025-01-01",
-};
-
-const mockEnrollments: Enrollments[] = [
-  {
-    enrollments_id: 1,
-    user_id: 1,
-    course_id: 1,
-    progress: 100,
-    status: EnrollmentStatus.COMPLETED,
-    started_at: "01.02.2025",
-    complected_at: "01.04.2025",
-  },
-  {
-    enrollments_id: 2,
-    user_id: 1,
-    course_id: 2,
-    progress: 100,
-    status: EnrollmentStatus.COMPLETED,
-    started_at: "2025-01-01",
-    complected_at: "01.03.2025",
-  },
-  {
-    enrollments_id: 3,
-    user_id: 1,
-    course_id: 3,
-    progress: 0,
-    status: EnrollmentStatus.ENROLLED,
-    started_at: "2025-11-30",
-    complected_at: "",
-  },
-];
+import { IoWarningOutline } from "react-icons/io5";
+import { MdOutlineAttachMoney } from "react-icons/md";
+import { FaMoneyCheckDollar } from "react-icons/fa6";
 
 export function MyProfilePage() {
-  const [roleName, setRoleName] = useState("User");
+  const [roleName, setRoleName] = useState<string>("");
 
-  useEffect(() => setRoleName(mockRole.role_name), []);
+  useEffect(() => {
+    const foundRole = mockRole.find(
+      (role) => role.role_id === mockUser.role_id
+    );
+    if (foundRole) setRoleName(foundRole.role_name);
+  }, []);
 
   return (
     <section
-      className="w-full flex justify-center rounded-tl-2xl
+      className="w-[95vw] m-auto flex justify-center rounded-tl-2xl
       rounded-bl-2x bg-fourth py-16 px-6 lg:px-20"
     >
       <motion.div
@@ -147,30 +92,36 @@ export function MyProfilePage() {
         </motion.div>
 
         <div className="lg:col-span-2 flex flex-col gap-12">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
               { label: "Email", value: mockUser.email, icon: <HiMail /> },
               { label: "Login", value: mockUser.login, icon: <HiUser /> },
               { label: "Role", value: roleName, icon: <HiUserGroup /> },
-              { label: "UF ID", value: mockUser.uf_id, icon: <BsBank2 /> },
+              {
+                label: "UF ID",
+                value: mockUser.uf_id,
+                icon: <FaMoneyCheckDollar />,
+              },
               {
                 label: "Balance",
                 value: `${mockFinance.balance} ${mockFinance.currency}`,
-                icon: <IoCardOutline />,
+                icon: <MdOutlineAttachMoney />,
               },
               {
                 label: "Subscription",
                 status: `${mockSubscription.status}`,
                 value: `${mockSubscription.start_date} → ${mockSubscription.end_date}`,
-                icon: <MdOutlineWorkspacePremium />,
+                icon: <RiVipCrownFill />,
               },
             ].map((item, idx) => (
               <motion.div
                 key={idx}
                 whileHover={{ scale: 1.04 }}
-                className="bg-fifth/60 rounded-2xl p-5 shadow-xl text-sixth font-Jura backdrop-blur-lg border border-white/10"
+                className="bg-fifth/60 rounded-2xl p-5 shadow-xl text-sixth
+                font-Jura backdrop-blur-lg border border-white/10"
               >
-                <span className="font-semibold mb-1 flex flex-row items-center text-lg opacity-70">
+                <span className="font-semibold mb-1 flex flex-row
+                items-center text-lg opacity-70 gap-1">
                   {item.icon}
                   {item.label}: &nbsp;{item.status}
                 </span>

@@ -21,6 +21,7 @@ export default defineConfig({
       "@routes": path.resolve(__dirname, "src/routes"),
       "@context": path.resolve(__dirname, "src/context"),
       "@shared": path.resolve(__dirname, "src/shared"),
+      "@mock": path.resolve(__dirname, "src/mock"),
     },
   },
   // server: {
