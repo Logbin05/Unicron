@@ -8,9 +8,9 @@ import {
   HiBookmark,
   HiSquares2X2,
   HiOutlineViewfinderCircle,
+  HiShoppingBag,
 } from "react-icons/hi2";
 import { motion } from "motion/react";
-import { CiShop } from "react-icons/ci";
 import avatar from "@assets/image/avatar.jpeg";
 import type { SidebarType } from "@store/sidebar";
 import { useEffect, useRef, useState } from "react";
@@ -66,7 +66,7 @@ export function SidebarUser() {
     },
     {
       label: "Services",
-      icon: <CiShop className="text-2xl" />,
+      icon: <HiShoppingBag className="text-2xl" />,
       link: "/u/services",
     },
     {

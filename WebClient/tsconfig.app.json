@@ -38,7 +38,8 @@
       "@entities/*": ["entities/*"],
       "@routes/*": ["routes/*"],
       "@context/*": ["context/*"],
-      "@shared/*": ["shared/*"]
+      "@shared/*": ["shared/*"],
+      "@mock/*": ["mock/*"]
     }
   },
   "include": ["src"]
