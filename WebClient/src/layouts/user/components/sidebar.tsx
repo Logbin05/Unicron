@@ -168,7 +168,7 @@ export function SidebarUser() {
           <div className="flex items-center justify-between px-4 py-5 border-b border-fifth/30">
             <div
               className={`
-                flex items-center gap-3 overflow-hidden transition-all duration-300
+                flex items-center gap-3 transition-all duration-300
                 ${
                   sidebar.isOpen
                     ? "opacity-100 max-w-[200px]"
@@ -213,7 +213,7 @@ export function SidebarUser() {
             </div>
           </div>
 
-          <div className="mt-5 px-3 overflow-auto flex-1">
+          <div className="mt-5 px-3 overflow-y-hidden flex-1">
             {renderMenuSection("Account", accountMenu)}
             {renderMenuSection("Courses", coursesMenu)}
             {renderMenuSection("Other", otherMenu)}

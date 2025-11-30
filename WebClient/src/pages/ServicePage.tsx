@@ -1,8 +1,22 @@
 import { useState } from "react";
+import { PopUp } from "@components/popup/popup";
 import { mockCourses, mockTariffs } from "@mock/data";
+import type { Course } from "@entities/data/course";
 
 export function ServicePage() {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [activeCourse, setActiveCourse] = useState<Course | null>(null);
   const [activeTab, setActiveTab] = useState<"courses" | "tariffs">("courses");
+
+  function openPopup(course: Course) {
+    setActiveCourse(course);
+    setIsOpen(true);
+  }
+
+  function closePopup() {
+    setIsOpen(false);
+    setActiveCourse(null);
+  }
 
   return (
     <section className="bg-third w-[85vw] mx-auto min-h-screen py-10">
@@ -72,6 +86,7 @@ export function ServicePage() {
                 </span>
 
                 <button
+                  onClick={() => openPopup(c)}
                   className="bg-primary py-2 px-5 rounded-xl font-semibold cursor-pointer
                              transition-all hover:bg-third hover:text-fourth hover:scale-105"
                 >
@@ -114,6 +129,21 @@ export function ServicePage() {
             </div>
           ))}
       </div>
+
+      {isOpen && activeCourse && (
+        <div className="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50">
+          <div className="bg-primary p-6 rounded-2xl w-11/12 max-w-md relative">
+            <PopUp
+              id={activeCourse.course_id}
+              title={activeCourse.course_name}
+              description={activeCourse.course_desc}
+              image={activeCourse.course_image}
+              price={activeCourse.price}
+              onClose={closePopup}
+            />
+          </div>
+        </div>
+      )}
     </section>
   );
 }
