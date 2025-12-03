@@ -3,6 +3,7 @@ import { MainPage } from "../pages/MainPage";
 import { MyProfilePage } from "@pages/ProfilePage";
 import { UserLayout } from "@layouts/user/layout";
 import { ServicePage } from "@pages/ServicePage";
+import { SupportPage } from "@pages/SupportPage";
 
 export function AppRoutes() {
   return (
@@ -12,6 +13,7 @@ export function AppRoutes() {
         <Route path="u/*" element={<UserLayout />}>
           <Route path="me" element={<MyProfilePage />} />
           <Route path="services" element={<ServicePage />} />
+          <Route path="support" element={<SupportPage />} />
         </Route>
       </Routes>
     </>
