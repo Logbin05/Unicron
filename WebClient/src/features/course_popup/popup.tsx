@@ -105,7 +105,7 @@ export function PopUp({
                 transition-all text-xl
               "
             >
-              Buy for ${price}
+              {price !== 0 ? `Buy for ${price}` : "Take of free"}
             </motion.button>
           </div>
         </motion.div>

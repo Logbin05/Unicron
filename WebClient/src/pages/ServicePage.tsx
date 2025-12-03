@@ -53,12 +53,13 @@ export function ServicePage() {
               type="text"
               placeholder="Searches courses"
               className="outline-2 outline-fifth rounded-2xl 2k:w-lg font-Tektur
+              xl:text-lg xl:px-2 xl:py-2 xl:w-lg
               2k:text-xl 2k:px-3 2k:py-2 text-fifth placeholder:text-fifth transition-all focus-visible:outline-fifth
               focus-visible:shadow-lg focus-visible:shadow-fifth"
             />
             <button
               type="button"
-              className="bg-secondary 2k:p-3 2k:mx-3 rounded-xl cursor-pointer transition-all active:bg-secondary/70"
+              className="bg-secondary xl:p-2 xl:mx-2 2k:p-3 2k:mx-3 rounded-xl cursor-pointer transition-all active:bg-secondary/70"
             >
               <HiSearch className="text-2xl text-fifth" />
             </button>
@@ -96,7 +97,10 @@ export function ServicePage() {
               onSelect={(val) => {
                 const item =
                   mockCategories
-                    .map((c) => ({ label: c.category_name, value: c.category_id.toString() }))
+                    .map((c) => ({
+                      label: c.category_name,
+                      value: c.category_id.toString(),
+                    }))
                     .find((i) => i.value === val) || null;
                 setSelectedCategory(item);
               }}
@@ -138,7 +142,7 @@ export function ServicePage() {
 
                 <div className="flex justify-between items-center mt-6 text-sixth font-medium">
                   <span className="text-xl font-bold">
-                    {c.price !== 0 ? `$${c.price}` : "find"}
+                    {c.price !== 0 ? `$${c.price}` : "Free"}
                   </span>
                   <span className="text-sm opacity-60">
                     {c.visibility === "public" ? "Public" : "Private"}

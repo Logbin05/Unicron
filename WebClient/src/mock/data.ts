@@ -238,6 +238,22 @@ export const mockCourses: Course[] = [
     created_at: "2024-07-22",
     updated_at: "2025-02-17",
   },
+  {
+    course_id: 9,
+    institution_id: 1,
+    author_id: 3,
+    category_id: 1,
+    course_name: "JavaScript Zero to Hero",
+    course_slug: "javascript-zero-to-hero",
+    course_desc:
+      "Full JavaScript course covering fundamentals, ES6+, async programming, DOM and real projects.",
+    course_image: courseImg1,
+    price: 0,
+    is_published: true,
+    visibility: "public",
+    created_at: "2024-05-10",
+    updated_at: "2025-01-20",
+  },
 ];
 export const mockTariffs: Tariffs[] = [
   {
