@@ -1,13 +1,18 @@
-import avatar from '@assets/image/avatar.jpeg';
-import courseImg1 from "@assets/course_img/courseImg1.jpeg";
-import courseImg2 from "@assets/course_img/courseImg2.jpeg"
-import courseImg3 from "@assets/course_img/courseImg3.jpeg";
-import courseImg4 from "@assets/course_img/courseImg4.jpeg";
+import postImg from "@assets/post/post.jpeg";
+import avatar from "@assets/image/avatar.jpeg";
+import courseImg1 from "@assets/course/courseImg1.jpeg";
+import courseImg2 from "@assets/course/courseImg2.jpeg";
+import courseImg3 from "@assets/course/courseImg3.jpeg";
+import courseImg4 from "@assets/course/courseImg4.jpeg";
+import { ListNews, type Post } from "@entities/data/post";
+import avatarPlaceholder1 from "@assets/post/author1.jpeg";
+import avatarPlaceholder2 from "@assets/post/author2.jpeg";
 import type { User, UsersFinances } from "@entities/data/user";
 import type { Subscriptions, Tariffs } from "@entities/data/subscriptions";
 import { SubscriptionStatus, EnrollmentStatus } from "@entities/data/enums";
 import type { Categories, Course, Enrollments } from "@entities/data/course";
 
+// Users
 export const mockUser: User = {
   user_id: 1,
   full_name: "Alexey Logbinov",
@@ -86,6 +91,7 @@ export const mockEnrollments: Enrollments[] = [
   },
 ];
 
+// Marketplace
 export const mockCategories: Categories[] = [
   {
     category_id: 1,
@@ -271,8 +277,6 @@ export const mockCourses: Course[] = [
     updated_at: "2025-03-10",
   },
 ];
-
-
 export const mockTariffs: Tariffs[] = [
   {
     tariff_id: 1,
@@ -306,5 +310,71 @@ export const mockTariffs: Tariffs[] = [
     tariff_price: 0,
     created_at: "2025-11-04T08:00:00Z",
     updated_at: "2025-11-04T08:00:00Z",
+  },
+];
+
+// Posts
+export const mockPosts: Post[] = [
+  {
+    post_id: 1,
+    image: postImg,
+    title: "Started a new Data Science course on Unicorn!",
+    body: "Hello everyone! Decided to keep up with the trends and dove into the world of data. The Unicorn platform has been great so far with excellent introductions and interactive tasks. Highly recommend!",
+    type: ListNews.COURSES,
+    author: {
+      author_id: 101,
+      name: "Alexey Smirnov",
+      avatar_url: avatarPlaceholder1,
+      role: "Unicorn Student",
+    },
+    is_liked_by_user: true,
+    likes_count: 42,
+    comments_count: 8,
+    views_count: 1200,
+    created_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+    updated_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+    tags: ["Data Science", "Learning", "Unicorn", "IT"],
+    target_url: "unicorn.platform",
+  },
+  {
+    post_id: 2,
+    image: postImg,
+    title: "Major Platform Update: New Code Editor!",
+    body: "We are excited to introduce our new, improved code editor with syntax highlighting and autocompletion. Learning programming has never been easier! Read more details in our article.",
+    type: ListNews.UPDATED,
+    author: {
+      author_id: 1,
+      name: "Team Unicorn",
+      avatar_url: avatarPlaceholder2,
+      role: "Admin",
+    },
+    is_liked_by_user: false,
+    likes_count: 150,
+    comments_count: 24,
+    views_count: 5600,
+    created_at: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
+    updated_at: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
+    tags: ["Update", "Programming", "Unicorn", "Tech"],
+    target_url: "unicorn.platform",
+  },
+  {
+    post_id: 3,
+    image: postImg,
+    title: "Success Story: How Mike landed a job after the design course",
+    body: "Mike shares his experience transitioning from accounting to UX/UI design. His secret: perseverance and practical tasks on our platform.",
+    type: ListNews.SUCCESS_STORY,
+    author: {
+      author_id: 102,
+      name: "Michael Petrov",
+      avatar_url: avatarPlaceholder1,
+      role: "Alumni",
+    },
+    is_liked_by_user: false,
+    likes_count: 89,
+    comments_count: 15,
+    views_count: 3200,
+    created_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+    updated_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
+    tags: ["Review", "Design", "Success Story", "Career"],
   },
 ];
