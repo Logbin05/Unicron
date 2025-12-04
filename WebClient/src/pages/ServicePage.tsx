@@ -6,9 +6,12 @@ import { DropDown } from "@components/dropdown/dropdown";
 import type { DropdownItem } from "@entities/ui/dropdown";
 import { mockCourses, mockTariffs, mockCategories } from "@mock/data";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
+import { Pagination } from "@components/pagination/pagination";
 
 export function ServicePage() {
+  const itemsPerPage = 9;
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [activeCourse, setActiveCourse] = useState<Course | null>(null);
   const [activeTab, setActiveTab] = useState<"courses" | "tariffs">("courses");
   const [selectedCategory, setSelectedCategory] = useState<DropdownItem | null>(
@@ -40,6 +43,14 @@ export function ServicePage() {
     }),
     hover: { scale: 1.05, y: -5, boxShadow: "0 20px 30px rgba(0,0,0,0.3)" },
   };
+
+  const filteredCourses = mockCourses;
+  const totalPages = Math.ceil(filteredCourses.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginationCourses = filteredCourses.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   return (
     <section className="bg-linear-to-b from-fourth/80 via-third to-fourth min-h-screen py-12 px-6">
@@ -86,7 +97,8 @@ export function ServicePage() {
         </div>
 
         {activeTab === "courses" && (
-          <div className="flex bg-fourth/30 backdrop-blur-2xl p-2 justify-around rounded-3xl shadow-xl items-center relative z-50">
+          <div className="flex bg-fourth/30 backdrop-blur-2xl p-2 justify-around rounded-3xl
+          shadow-xl items-center relative z-50">
             <DropDown
               label="Select category"
               items={mockCategories.map((c) => ({
@@ -109,10 +121,11 @@ export function ServicePage() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2k:grid-cols-3 gap-5 justify-items-center z-0 relative">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2k:grid-cols-3 gap-5
+       justify-items-center z-0 relative">
         <AnimatePresence>
           {activeTab === "courses" &&
-            mockCourses.map((c, index) => (
+            paginationCourses.map((c, index) => (
               <motion.div
                 key={c.course_id}
                 custom={index}
@@ -192,6 +205,24 @@ export function ServicePage() {
             ))}
         </AnimatePresence>
       </div>
+
+      {activeTab === "courses" && (
+        <div className="fixed -my-4 bottom-2 left-1/2 -translate-x-1/2 z-50">
+          <Pagination
+            nav={{ current: currentPage, total: totalPages }}
+            disable={{
+              left: currentPage === 1,
+              right: currentPage === totalPages,
+            }}
+            onPrevPaginationClick={() =>
+              setCurrentPage((prev) => Math.max(1, prev - 1))
+            }
+            onNextPaginationClick={() =>
+              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+            }
+          />
+        </div>
+      )}
 
       <AnimatePresence>
         {isOpen && activeCourse && (

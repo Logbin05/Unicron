@@ -254,7 +254,25 @@ export const mockCourses: Course[] = [
     created_at: "2024-05-10",
     updated_at: "2025-01-20",
   },
+  {
+    course_id: 10,
+    institution_id: 2,
+    author_id: 5,
+    category_id: 3,
+    course_name: "Digital Marketing Mastery",
+    course_slug: "digital-marketing-mastery",
+    course_desc:
+      "Master SEO, content marketing, advertising, target analysis and social media strategies.",
+    course_image: courseImg3,
+    price: 245,
+    is_published: false,
+    visibility: "private",
+    created_at: "2024-12-14",
+    updated_at: "2025-03-10",
+  },
 ];
+
+
 export const mockTariffs: Tariffs[] = [
   {
     tariff_id: 1,
