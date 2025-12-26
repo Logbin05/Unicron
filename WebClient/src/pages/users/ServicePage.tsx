@@ -121,7 +121,7 @@ export function ServicePage() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 2k:grid-cols-3 gap-5
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 lg:left-10 2k:grid-cols-3 gap-5
        justify-items-center z-0 relative">
         <AnimatePresence>
           {activeTab === "courses" &&
@@ -134,20 +134,20 @@ export function ServicePage() {
                 whileHover="hover"
                 variants={cardVariants}
                 className="bg-fourth/60 backdrop-blur-xl border border-white/10
-                           rounded-3xl p-2 w-full lg:max-w-lg 2k:max-w-2xl 2k:p-5 cursor-pointer transform-gpu relative z-0"
+                           rounded-3xl p-2 w-full lg:max-w-[620px] 2k:max-w-3xl 2k:p-5 cursor-pointer transform-gpu relative z-0"
               >
                 <div className="flex gap-4">
                   <motion.img
                     src={c.course_image}
                     alt={c.course_name}
-                    className="w-44 h-44 2k:size-60 object-cover rounded-2xl shadow-lg"
+                    className="w-44 h-35 2k:size-60 object-cover rounded-2xl shadow-lg"
                     whileHover={{ scale: 1.1, rotate: 2 }}
                   />
                   <div className="flex flex-col justify-between">
                     <h2 className="text-sixth text-xl font-Jura font-bold">
                       {c.course_name}
                     </h2>
-                    <p className="text-sixth/70 text-sm mt-2 leading-relaxed line-clamp-5">
+                    <p className="text-sixth/70 text-sm absolute top-20 leading-relaxed line-clamp-5">
                       {c.course_desc}
                     </p>
                   </div>
@@ -207,7 +207,7 @@ export function ServicePage() {
       </div>
 
       {activeTab === "courses" && (
-        <div className="fixed -my-4 bottom-2 left-1/2 -translate-x-1/2 z-50">
+        <div className="fixed -my-4 bottom-4 2k:bottom-1 left-1/2 -translate-x-1/2 z-50">
           <Pagination
             nav={{ current: currentPage, total: totalPages }}
             disable={{
