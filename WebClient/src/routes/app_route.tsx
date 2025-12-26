@@ -5,6 +5,7 @@ import { UserLayout } from "@layouts/user/layout";
 import { ServicePage } from "@pages/users/ServicePage";
 import { SupportPage } from "@pages/users/SupportPage";
 import { HomePage } from "@pages/users/HomePage";
+import { SettingsPage } from "@pages/users/SettingsPage";
 
 export function AppRoutes() {
   return (
@@ -16,6 +17,7 @@ export function AppRoutes() {
           <Route path="me" element={<MyProfilePage />} />
           <Route path="services" element={<ServicePage />} />
           <Route path="support" element={<SupportPage />} />
+          <Route path="settings" element={<SettingsPage />} />
         </Route>
       </Routes>
     </>
