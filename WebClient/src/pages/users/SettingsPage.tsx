@@ -1,5 +1,5 @@
 import { MESSAGES } from "@lang/messages";
-import { useLanguage } from "@hooks/useLangueage";
+import { useLanguage } from "@hooks/useLanguage";
 import { mockUser, mockFinance } from "@mock/data";
 
 export function SettingsPage() {
@@ -92,20 +92,26 @@ export function SettingsPage() {
             <p className="2k:text-18 text-sixth mb-3">{t.language}</p>
 
             <div className="flex gap-2">
-              {(["ru", "en"] as const).map((l) => (
-                <button
-                  key={l}
-                  onClick={() => setLang(l)}
-                  className={[
-                    "flex-1 sm:flex-none px-4 py-2 rounded-md text-14 font-medium transition",
-                    lang === l
-                      ? "bg-fifth text-primary shadow scale-[1.03]"
-                      : "bg-secondary text-sixth border border-fourth hover:bg-fourth hover:scale-[1.03]",
-                  ].join(" ")}
-                >
-                  {l.toUpperCase()}
-                </button>
-              ))}
+              <button
+                className={`flex-1 sm:flex-none px-4 py-2 rounded-md text-14 font-medium ${
+                  lang === "ru"
+                    ? "bg-fifth text-primary"
+                    : "bg-secondary text-sixth border border-fourth"
+                }`}
+                onClick={() => setLang("ru")}
+              >
+                RU
+              </button>
+              <button
+                className={`flex-1 sm:flex-none px-4 py-2 rounded-md text-14 font-medium ${
+                  lang === "en"
+                    ? "bg-fifth text-primary"
+                    : "bg-secondary text-sixth border border-fourth"
+                }`}
+                onClick={() => setLang("en")}
+              >
+                EN
+              </button>
             </div>
           </div>
 

@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Lang } from "./lang";
+import type { Messages } from "@entities/ui/lang";
 
-export const MESSAGES: Record<Lang, any> = {
+export const MESSAGES: Record<Lang, Messages> = {
   en: {
     settings: {
       title: "Settings",
@@ -13,6 +13,22 @@ export const MESSAGES: Record<Lang, any> = {
       label_4: "Balance",
       label_5: "Currency",
       save: "Save changes",
+    },
+    sidebar: {
+      label_1: "Account",
+      label_2: "Courses",
+      label_3: "Other",
+      label_4: "Action",
+      home: "Home",
+      profile: "Profile",
+      message: "Message",
+      myCourse: "My course",
+      favorite: "Favorite",
+      dashboard: "Dashboard",
+      services: "Services",
+      settings: "Settings",
+      contact: "Supports",
+      logout: "LogOut",
     },
   },
   ru: {
@@ -26,6 +42,22 @@ export const MESSAGES: Record<Lang, any> = {
       label_4: "Баланс",
       label_5: "Валюта",
       save: "Сохранить изменения",
+    },
+    sidebar: {
+      label_1: "Аккаунт",
+      label_2: "Курсы",
+      label_3: "Другое",
+      label_4: "Действия",
+      home: "Главная",
+      profile: "Профиль",
+      message: "Сообщения",
+      myCourse: "Мои курсы",
+      favorite: "Избранное",
+      dashboard: "Панель",
+      services: "Услуги",
+      settings: "Настройки",
+      contact: "Помощь",
+      logout: "Выйти",
     },
   },
 };
