@@ -39,7 +39,8 @@
       "@routes/*": ["routes/*"],
       "@context/*": ["context/*"],
       "@shared/*": ["shared/*"],
-      "@mock/*": ["mock/*"]
+      "@mock/*": ["mock/*"],
+      "@lang/*": ["lang/*"]
     }
   },
   "include": ["src"]

@@ -22,6 +22,7 @@ export default defineConfig({
       "@context": path.resolve(__dirname, "src/context"),
       "@shared": path.resolve(__dirname, "src/shared"),
       "@mock": path.resolve(__dirname, "src/mock"),
+      "@lang": path.resolve(__dirname, "src/lang"),
     },
   },
   // server: {
