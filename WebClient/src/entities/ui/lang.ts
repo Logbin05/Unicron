@@ -42,10 +42,20 @@ interface HomeTexts {
   subtitle: string;
 }
 
+interface SupportTexts {
+  label_1: string;
+  label_2: string;
+  label_3: string;
+  desc_1: string;
+  desc_2: string;
+  desc_3: string;
+}
+
 export interface Messages {
   settings: SettingsTexts;
   sidebar: MenuItemTexts;
   profile: ProfileTexts;
   home: HomeTexts;
+  support: SupportTexts;
 }
 
