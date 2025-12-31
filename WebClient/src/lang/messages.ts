@@ -77,5 +77,6 @@ export const MESSAGES: Record<Lang, Messages> = {
       label_6: "Подписка",
       label_7: "Последний прогресс",
     },
+    
   },
 };
