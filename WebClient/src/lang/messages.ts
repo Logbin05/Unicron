@@ -59,5 +59,14 @@ export const MESSAGES: Record<Lang, Messages> = {
       contact: "Помощь",
       logout: "Выйти",
     },
+    profile: {
+      label_1: "Почта",
+      label_2: "Логин",
+      label_3: "Роль",
+      label_4: "Платежный ID",
+      label_5: "Баланс",
+      label_6: "Подписка",
+      label_7: "Последний прогресс"
+    }
   },
 };

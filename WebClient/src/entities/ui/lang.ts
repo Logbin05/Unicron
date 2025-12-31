@@ -27,8 +27,19 @@ interface SettingsTexts {
   save: string;
 }
 
+interface ProfileTexts {
+  label_1: string;
+  label_2: string;
+  label_3: string;
+  label_4: string;
+  label_5: string;
+  label_6: string;
+  label_7: string;
+}
+
 export interface Messages {
   settings: SettingsTexts;
   sidebar: MenuItemTexts;
+  profile: ProfileTexts;
 }
 
