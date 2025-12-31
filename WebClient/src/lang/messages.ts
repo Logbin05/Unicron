@@ -39,6 +39,11 @@ export const MESSAGES: Record<Lang, Messages> = {
       label_6: "Subscription",
       label_7: "Last Progress",
     },
+    home: {
+      title: "Home",
+      subtitle:
+        "Stay updated with the latest news, updates, and success stories from Unicorn",
+    },
   },
   ru: {
     settings: {
@@ -76,6 +81,11 @@ export const MESSAGES: Record<Lang, Messages> = {
       label_5: "Баланс",
       label_6: "Подписка",
       label_7: "Последний прогресс",
+    },
+    home: {
+      title: "Главная",
+      subtitle:
+        "Будьте в курсе последних новостей, обновлений и историй успеха от Unicorn",
     },
   },
 };

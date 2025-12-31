@@ -37,9 +37,15 @@ interface ProfileTexts {
   label_7: string;
 }
 
+interface HomeTexts {
+  title: string;
+  subtitle: string;
+}
+
 export interface Messages {
   settings: SettingsTexts;
   sidebar: MenuItemTexts;
   profile: ProfileTexts;
+  home: HomeTexts;
 }
 
