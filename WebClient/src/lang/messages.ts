@@ -30,6 +30,15 @@ export const MESSAGES: Record<Lang, Messages> = {
       contact: "Supports",
       logout: "LogOut",
     },
+    profile: {
+      label_1: "Email",
+      label_2: "Login",
+      label_3: "Role",
+      label_4: "Payments ID",
+      label_5: "Balance",
+      label_6: "Subscription",
+      label_7: "Last Progress",
+    },
   },
   ru: {
     settings: {
@@ -66,7 +75,7 @@ export const MESSAGES: Record<Lang, Messages> = {
       label_4: "Платежный ID",
       label_5: "Баланс",
       label_6: "Подписка",
-      label_7: "Последний прогресс"
-    }
+      label_7: "Последний прогресс",
+    },
   },
 };
