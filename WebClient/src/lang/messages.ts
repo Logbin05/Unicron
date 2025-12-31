@@ -39,6 +39,11 @@ export const MESSAGES: Record<Lang, Messages> = {
       label_6: "Subscription",
       label_7: "Last Progress",
     },
+    home: {
+      title: "Home",
+      subtitle:
+        "Stay updated with the latest news, updates, and success stories from Unicorn",
+    },
   },
   ru: {
     settings: {
