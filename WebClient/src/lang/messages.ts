@@ -77,6 +77,10 @@ export const MESSAGES: Record<Lang, Messages> = {
       label_6: "Подписка",
       label_7: "Последний прогресс",
     },
-    
+    home: {
+      title: "Главная",
+      subtitle:
+        "Будьте в курсе последних новостей, обновлений и историй успеха от Unicorn",
+    },
   },
 };
