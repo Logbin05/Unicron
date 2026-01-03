@@ -1,1 +1,8 @@
+# build
 /target
+
+# env
+.env
+
+# ssl
+certs

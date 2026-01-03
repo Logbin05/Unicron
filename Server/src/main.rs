@@ -1,18 +1,32 @@
-use axum::{Router, extract::State, routing::get};
+use axum::{
+    Router,
+    extract::{Json, State},
+    routing::{get, post},
+};
 use dotenvy::dotenv;
+use rustls::crypto::{CryptoProvider, ring};
 use std::net::SocketAddr;
 use tokio::net::TcpListener;
+use tokio_rustls::TlsAcceptor;
 use tracing_subscriber;
 
 use hyper::server::conn::http2;
 use hyper_util::rt::{TokioExecutor, TokioIo};
 use hyper_util::service::TowerToHyperService;
 
+use crate::structure::kafka::KafkaMessage;
+
 pub mod db;
+pub mod kafka;
 pub mod state;
+pub mod structure;
+pub mod tls;
 
 #[tokio::main]
 async fn main() {
+    CryptoProvider::install_default(ring::default_provider())
+        .expect("Failed to install rustls crypto provider");
+
     tracing_subscriber::fmt::init();
     dotenv().ok();
 
@@ -21,6 +35,7 @@ async fn main() {
     let app = Router::new()
         .route("/", get(root))
         .route("/redis", get(redis_test))
+        .route("/kafka", post(send_kafka))
         .with_state(app_state.clone());
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
@@ -28,43 +43,42 @@ async fn main() {
         .await
         .expect("failed to bind address");
 
-    tracing::info!("Listening on HTTP/2 (h2c): http://{}", addr);
+    let tls_config = tls::load_tls_config();
+    let tls_acceptor = TlsAcceptor::from(tls_config);
 
-    let shutdown_signal = shutdown_signal();
-    tokio::pin!(shutdown_signal);
+    tracing::info!("Listening on HTTPS (HTTP/2): https://{}", addr);
 
     loop {
-        tokio::select! {
-            _ = &mut shutdown_signal => {
-                tracing::info!("Shutdown signal received. Stopping accept loop.");
-                break;
+        let (stream, _) = match listener.accept().await {
+            Ok(v) => v,
+            Err(err) => {
+                tracing::error!("Accept error: {err}");
+                continue;
             }
+        };
 
-            accept_result = listener.accept() => {
-                let (stream, _) = match accept_result {
-                    Ok(v) => v,
-                    Err(err) => {
-                        tracing::error!("Accept error: {err}");
-                        continue;
-                    }
-                };
+        let tls_acceptor = tls_acceptor.clone();
+        let service = TowerToHyperService::new(app.clone());
 
-                let stream = TokioIo::new(stream);
-                let service = TowerToHyperService::new(app.clone());
+        tokio::spawn(async move {
+            let tls_stream = match tls_acceptor.accept(stream).await {
+                Ok(s) => s,
+                Err(err) => {
+                    tracing::warn!("TLS handshake failed: {err}");
+                    return;
+                }
+            };
 
-                tokio::spawn(async move {
-                    if let Err(err) = http2::Builder::new(TokioExecutor::new())
-                        .serve_connection(stream, service)
-                        .await
-                    {
-                        tracing::error!("Connection error: {err}");
-                    }
-                });
+            let io = TokioIo::new(tls_stream);
+
+            if let Err(err) = http2::Builder::new(TokioExecutor::new())
+                .serve_connection(io, service)
+                .await
+            {
+                tracing::error!("HTTP/2 error: {err}");
             }
-        }
+        });
     }
-
-    tracing::info!("Server shutdown complete");
 }
 
 async fn root(State(state): State<state::SharedState>) -> String {
@@ -81,27 +95,12 @@ async fn redis_test(State(state): State<state::SharedState>) -> String {
     }
 }
 
-async fn shutdown_signal() {
-    let ctrl_c = async {
-        tokio::signal::ctrl_c()
-            .await
-            .expect("failed to install Ctrl+C handler");
-    };
-
-    #[cfg(unix)]
-    let terminate = async {
-        use tokio::signal::unix::{SignalKind, signal};
-        signal(SignalKind::terminate())
-            .expect("failed to install SIGTERM handler")
-            .recv()
-            .await;
-    };
-
-    #[cfg(not(unix))]
-    let terminate = std::future::pending::<()>();
-
-    tokio::select! {
-        _ = ctrl_c => {},
-        _ = terminate => {},
+async fn send_kafka(
+    State(state): State<state::SharedState>,
+    Json(msg): Json<KafkaMessage>,
+) -> String {
+    match kafka::send_message(&state.kafka_producer, &msg.topic, &msg.key, &msg.payload).await {
+        Ok(_) => format!("Message sent to topic '{}'", msg.topic),
+        Err(err) => format!("Kafka send error: {}", err),
     }
 }
