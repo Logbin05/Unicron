@@ -6,3 +6,6 @@
 
 # ssl
 certs
+
+# dev
+src/services/users/src/service.rs

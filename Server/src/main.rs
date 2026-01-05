@@ -21,6 +21,9 @@ pub mod kafka;
 pub mod state;
 pub mod structure;
 pub mod tls;
+pub mod generated;
+pub mod services;
+pub mod proto;
 
 #[tokio::main]
 async fn main() {
