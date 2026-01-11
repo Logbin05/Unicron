@@ -5,3 +5,4 @@ pub mod institutions;
 pub mod marketplace;
 pub mod progress;
 pub mod users;
+pub mod auth;
