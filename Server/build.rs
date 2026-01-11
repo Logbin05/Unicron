@@ -6,6 +6,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .compile_protos(
             &[
                 "users.proto",
+                "auth.proto",
                 "common.proto",
                 "courses.proto",
                 "finance.proto",
