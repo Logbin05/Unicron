@@ -18,6 +18,7 @@ rdkafka = { version = "0.38.0", features = ["tokio"] }
 redis = "0.32.7"
 rustls = { version = "0.23.35", features = ["ring"] }
 rustls-pemfile = "2.2.0"
+rusty_paseto = "0.9.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.145"
 sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio-rustls", "time"] }

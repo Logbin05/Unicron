@@ -91,6 +91,7 @@ message VerifyUserRes {
   bool success = 1;
 }
 
+
 service UserService {
   rpc CreateUser(CreateNewUserReq) returns (CreateNewUserRes);
   rpc GetUser(GetUserReq) returns (GetUserRes);

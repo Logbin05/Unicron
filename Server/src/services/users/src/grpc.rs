@@ -1,11 +1,11 @@
 use crate::generated::users::*;
 use crate::services::users::src::repo::UserRepo;
 use crate::{generated::users::user_service_server::UserService, state::SharedState};
-use std::sync::Arc;
 use argon2::Argon2;
 use argon2::password_hash::PasswordHasher;
 use argon2::password_hash::SaltString;
 use argon2::password_hash::rand_core::OsRng;
+use std::sync::Arc;
 use tonic::{Request, Response, Status};
 
 pub struct UserGrpc {
@@ -16,27 +16,26 @@ pub struct UserGrpc {
 #[tonic::async_trait]
 impl UserService for UserGrpc {
     async fn create_user(
-    &self,
-    request: Request<CreateNewUserReq>,
-) -> Result<Response<CreateNewUserRes>, Status> {
-    let mut req = request.into_inner();
+        &self,
+        request: Request<CreateNewUserReq>,
+    ) -> Result<Response<CreateNewUserRes>, Status> {
+        let mut req = request.into_inner();
 
-    let salt = SaltString::generate(&mut OsRng);
-    let password_hash = Argon2::default()
-        .hash_password(req.password_hash.as_bytes(), &salt)
-        .map_err(|e| Status::internal(e.to_string()))?
-        .to_string();
-    req.password_hash = password_hash;
+        let salt = SaltString::generate(&mut OsRng);
+        let password_hash = Argon2::default()
+            .hash_password(req.password_hash.as_bytes(), &salt)
+            .map_err(|e| Status::internal(e.to_string()))?
+            .to_string();
+        req.password_hash = password_hash;
 
-    let user = self
-        .repo
-        .create_user(&req)
-        .await
-        .map_err(|e| Status::internal(e.to_string()))?;
+        let user = self
+            .repo
+            .create_user(&req)
+            .await
+            .map_err(|e| Status::internal(e.to_string()))?;
 
-    Ok(Response::new(CreateNewUserRes { user: Some(user) }))
-}
-
+        Ok(Response::new(CreateNewUserRes { user: Some(user) }))
+    }
 
     async fn get_user(&self, request: Request<GetUserReq>) -> Result<Response<GetUserRes>, Status> {
         let req = request.into_inner();
