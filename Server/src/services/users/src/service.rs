@@ -1,18 +1,14 @@
 use std::sync::Arc;
 
 use anyhow::Result;
+use argon2::password_hash::rand_core::OsRng;
 use argon2::{
     Argon2,
     password_hash::{PasswordHasher, SaltString},
 };
-use argon2::password_hash::rand_core::OsRng;
 
 use crate::{
-    generated::users::{
-        User,
-        CreateNewUserReq,
-        UpdateUserReq,
-    },
+    generated::users::{CreateNewUserReq, UpdateUserReq, User},
     services::users::src::repo::UserRepo,
 };
 
@@ -27,7 +23,6 @@ impl UserService {
 
     pub async fn create_user(&self, mut req: CreateNewUserReq) -> Result<User> {
         let salt = SaltString::generate(&mut OsRng);
-
         let password_hash = Argon2::default()
             .hash_password(req.password_hash.as_bytes(), &salt)
             .map_err(anyhow::Error::msg)?
@@ -42,18 +37,7 @@ impl UserService {
         self.repo.get_user(user_id).await
     }
 
-    pub async fn update_user(&self, mut req: UpdateUserReq) -> Result<Option<User>> {
-        if !req.password_hash.is_empty() {
-            let salt = SaltString::generate(&mut OsRng);
-
-            let password_hash = Argon2::default()
-                .hash_password(req.password_hash.as_bytes(), &salt)
-                .map_err(anyhow::Error::msg)?
-                .to_string();
-
-            req.password_hash = password_hash;
-        }
-
+    pub async fn update_user(&self, req: UpdateUserReq) -> Result<Option<User>> {
         self.repo.update_user(&req).await
     }
 

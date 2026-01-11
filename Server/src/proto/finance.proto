@@ -3,6 +3,25 @@ package finance;
 
 import "google/protobuf/timestamp.proto";
 
+message UserFinance {
+  int64 uf_id = 1;
+  int64 user_id = 2;
+  string card_id = 3;
+  string currency = 4;
+  double balance = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+message GetUserFinanceReq {
+  int64 user_id = 1;
+}
+
+message UpdateBalanceReq {
+  int64 user_id = 1;
+  double delta = 2;
+}
+
 message BuyHistory {
   int64 bh_id = 1;
   int64 user_id = 2;
@@ -14,26 +33,6 @@ message BuyHistory {
   google.protobuf.Timestamp created_at = 8;
 }
 
-message Basket {
-  int64 basket_id = 1;
-  int64 user_id = 2;
-  int64 service_id = 3;
-  google.protobuf.Timestamp added_at = 4;
-}
-
-service BuyHistoryService {
-  rpc CreateBuyRecord(CreateBuyReq) returns (BuyHistory);
-  rpc GetBuyRecord(GetBuyReq) returns (BuyHistory);
-  rpc ListBuyHistory(ListBuyReq) returns (ListBuyRes);
-}
-
-service BasketService {
-  rpc AddToBasket(AddToBasketReq) returns (Basket);
-  rpc RemoveFromBasket(RemoveFromBasketReq) returns (RemoveFromBasketRes);
-  rpc ListBasket(ListBasketReq) returns (ListBasketRes);
-  rpc ClearBasket(ClearBasketReq) returns (ClearBasketRes);
-}
-
 message CreateBuyReq {
   int64 user_id = 1;
   int64 service_id = 2;
@@ -42,23 +41,63 @@ message CreateBuyReq {
   string payment_provider = 5;
   string provider_payment_id = 6;
 }
-message GetBuyReq { int64 bh_id = 1; }
-message ListBuyReq {
+
+message GetBuyReq {
+  int64 bh_id = 1;
+}
+
+message ListBuysReq {
   int64 user_id = 1;
   int32 limit = 2;
   int32 offset = 3;
 }
-message ListBuyRes { repeated BuyHistory items = 1; }
+
+message ListBuysRes {
+  repeated BuyHistory items = 1;
+}
+
+message BasketItem {
+  int64 basket_id = 1;
+  int64 user_id = 2;
+  int64 service_id = 3;
+  google.protobuf.Timestamp added_at = 4;
+}
 
 message AddToBasketReq {
   int64 user_id = 1;
   int64 service_id = 2;
 }
+
 message RemoveFromBasketReq {
   int64 basket_id = 1;
 }
-message RemoveFromBasketRes { bool success = 1; }
-message ListBasketReq { int64 user_id = 1; }
-message ListBasketRes { repeated Basket items = 1; }
-message ClearBasketReq { int64 user_id = 1; }
-message ClearBasketRes { bool success = 1; }
+
+message RemoveBasketRes {
+  bool success = 1;
+}
+
+
+message ListBasketReq {
+  int64 user_id = 1;
+}
+
+message BasketRes {
+  repeated BasketItem items = 1;
+}
+
+service FinanceService {
+  rpc GetUserFinance(GetUserFinanceReq) returns (UserFinance);
+  rpc UpdateBalance(UpdateBalanceReq) returns (UserFinance);
+}
+
+service BuyHistoryService {
+  rpc CreateBuy(CreateBuyReq) returns (BuyHistory);
+  rpc GetBuy(GetBuyReq) returns (BuyHistory);
+  rpc ListBuys(ListBuysReq) returns (ListBuysRes);
+}
+
+service BasketService {
+  rpc Add(AddToBasketReq) returns (BasketItem);
+  rpc Remove(RemoveFromBasketReq) returns (RemoveBasketRes);
+  rpc List(ListBasketReq) returns (BasketRes);
+}

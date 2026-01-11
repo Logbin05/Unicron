@@ -12,23 +12,19 @@ pub struct User {
     pub user_id: i64,
     #[prost(int64, tag = "2")]
     pub role_id: i64,
-    #[prost(int64, tag = "3")]
-    pub uf_id: i64,
-    #[prost(string, tag = "4")]
+    #[prost(string, tag = "3")]
     pub full_name: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
+    #[prost(string, tag = "4")]
     pub login: ::prost::alloc::string::String,
-    #[prost(string, tag = "6")]
+    #[prost(string, tag = "5")]
     pub email: ::prost::alloc::string::String,
-    #[prost(string, tag = "7")]
+    #[prost(string, tag = "6")]
     pub avatar: ::prost::alloc::string::String,
-    #[prost(string, tag = "8")]
-    pub password_hash: ::prost::alloc::string::String,
-    #[prost(bool, tag = "9")]
+    #[prost(bool, tag = "7")]
     pub is_verified: bool,
-    #[prost(message, optional, tag = "10")]
+    #[prost(message, optional, tag = "8")]
     pub created_at: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, optional, tag = "11")]
+    #[prost(message, optional, tag = "9")]
     pub updated_at: ::core::option::Option<::prost_types::Timestamp>,
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
@@ -93,22 +89,30 @@ pub struct UpdateUserReq {
     pub user_id: i64,
     #[prost(int64, tag = "2")]
     pub role_id: i64,
-    #[prost(int64, tag = "3")]
-    pub uf_id: i64,
-    #[prost(string, tag = "4")]
+    #[prost(string, tag = "3")]
     pub full_name: ::prost::alloc::string::String,
-    #[prost(string, tag = "5")]
+    #[prost(string, tag = "4")]
     pub login: ::prost::alloc::string::String,
-    #[prost(string, tag = "6")]
+    #[prost(string, tag = "5")]
     pub email: ::prost::alloc::string::String,
-    #[prost(string, tag = "7")]
+    #[prost(string, tag = "6")]
     pub avatar: ::prost::alloc::string::String,
-    #[prost(string, tag = "8")]
-    pub password_hash: ::prost::alloc::string::String,
-    #[prost(bool, tag = "9")]
+    #[prost(bool, tag = "7")]
     pub is_verified: bool,
-    #[prost(message, optional, tag = "10")]
-    pub updated_at: ::core::option::Option<::prost_types::Timestamp>,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UpdatePasswordReq {
+    #[prost(int64, tag = "1")]
+    pub user_id: i64,
+    #[prost(string, tag = "2")]
+    pub old_password_hash: ::prost::alloc::string::String,
+    #[prost(string, tag = "3")]
+    pub new_password_hash: ::prost::alloc::string::String,
+}
+#[derive(Clone, Copy, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UpdatePasswordRes {
+    #[prost(bool, tag = "1")]
+    pub success: bool,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct UpdateUserRes {
@@ -281,6 +285,30 @@ pub mod user_service_client {
                 .insert(GrpcMethod::new("users.UserService", "UpdateUser"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn update_password(
+            &mut self,
+            request: impl tonic::IntoRequest<super::UpdatePasswordReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdatePasswordRes>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/users.UserService/UpdatePassword",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("users.UserService", "UpdatePassword"));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn verify_user(
             &mut self,
             request: impl tonic::IntoRequest<super::VerifyUserReq>,
@@ -332,6 +360,13 @@ pub mod user_service_server {
             &self,
             request: tonic::Request<super::UpdateUserReq>,
         ) -> std::result::Result<tonic::Response<super::UpdateUserRes>, tonic::Status>;
+        async fn update_password(
+            &self,
+            request: tonic::Request<super::UpdatePasswordReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::UpdatePasswordRes>,
+            tonic::Status,
+        >;
         async fn verify_user(
             &self,
             request: tonic::Request<super::VerifyUserReq>,
@@ -531,6 +566,51 @@ pub mod user_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = UpdateUserSvc(inner);
+                        let codec = tonic_prost::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/users.UserService/UpdatePassword" => {
+                    #[allow(non_camel_case_types)]
+                    struct UpdatePasswordSvc<T: UserService>(pub Arc<T>);
+                    impl<
+                        T: UserService,
+                    > tonic::server::UnaryService<super::UpdatePasswordReq>
+                    for UpdatePasswordSvc<T> {
+                        type Response = super::UpdatePasswordRes;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::UpdatePasswordReq>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as UserService>::update_password(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = UpdatePasswordSvc(inner);
                         let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
