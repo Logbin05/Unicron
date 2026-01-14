@@ -84,4 +84,25 @@ impl UserService for UserGrpc {
             .map_err(|e| Status::internal(e.to_string()))?;
         Ok(Response::new(UpdatePasswordRes { success: true }))
     }
+
+    async fn get_user_by_login(
+        &self,
+        request: Request<GetUserByLoginReq>,
+    ) -> Result<Response<GetUserByLoginRes>, Status> {
+        let login = request.into_inner().login_or_email;
+
+        let (user, hash) = self
+            .repo
+            .get_user_by_login_or_email(&login)
+            .await
+            .map_err(|e| Status::internal(e.to_string()))?
+            .ok_or(Status::not_found("user not found"))?;
+
+        Ok(Response::new(GetUserByLoginRes {
+          user: Some(UserWithPassword {
+            user: Some(user),
+            password_hash: hash,
+          })
+        }))
+    }
 }

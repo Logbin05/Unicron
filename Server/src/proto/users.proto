@@ -91,11 +91,24 @@ message VerifyUserRes {
   bool success = 1;
 }
 
+message UserWithPassword {
+  User user = 1;
+  string password_hash = 2;
+}
+
+message GetUserByLoginReq {
+  string login_or_email = 1;
+}
+
+message GetUserByLoginRes {
+  UserWithPassword user = 1;
+}
 
 service UserService {
   rpc CreateUser(CreateNewUserReq) returns (CreateNewUserRes);
   rpc GetUser(GetUserReq) returns (GetUserRes);
-  rpc UpdateUser (UpdateUserReq) returns (UpdateUserRes);
+  rpc GetUserByLogin(GetUserByLoginReq) returns (GetUserByLoginRes);
+  rpc UpdateUser(UpdateUserReq) returns (UpdateUserRes);
   rpc UpdatePassword(UpdatePasswordReq) returns (UpdatePasswordRes);
   rpc VerifyUser(VerifyUserReq) returns (VerifyUserRes);
 }
