@@ -146,4 +146,31 @@ impl UserRepo {
 
         Ok(row.map(|r| r.is_verified.unwrap_or(false)).unwrap_or(false))
     }
+
+    pub async fn get_user_by_login_or_email(&self, login_or_email: &str) -> Result<Option<(User, String)>> {
+      let row = sqlx::query!(
+        r#"
+          SELECT user_id, role_id, full_name, login, email, avatar, is_verified, password_hash, created_at, updated_at FROM users WHERE login = $1 OR email = $1
+        "#,
+        login_or_email
+      ).fetch_optional(&self.db)
+      .await?;
+
+    Ok(row.map(|r| {
+      (
+        User {
+          user_id: r.user_id,
+          role_id: r.role_id.unwrap_or_default(),
+          full_name: r.full_name,
+          login: r.login,
+          email: r.email,
+          avatar: r.avatar.unwrap_or_default(),
+          is_verified: r.is_verified.unwrap_or(false),
+          created_at: r.created_at.map(Self::offset_to_prost),
+          updated_at: r.created_at.map(Self::offset_to_prost),
+        },
+        r.password_hash,
+      )
+    }))
+    }
 }
