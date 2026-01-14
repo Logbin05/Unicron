@@ -1,3 +1,3 @@
-// pub mod users_client;
+pub mod clients;
 pub mod grpc;
 pub mod service;
