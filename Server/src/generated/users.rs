@@ -129,6 +129,23 @@ pub struct VerifyUserRes {
     #[prost(bool, tag = "1")]
     pub success: bool,
 }
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct UserWithPassword {
+    #[prost(message, optional, tag = "1")]
+    pub user: ::core::option::Option<User>,
+    #[prost(string, tag = "2")]
+    pub password_hash: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetUserByLoginReq {
+    #[prost(string, tag = "1")]
+    pub login_or_email: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
+pub struct GetUserByLoginRes {
+    #[prost(message, optional, tag = "1")]
+    pub user: ::core::option::Option<UserWithPassword>,
+}
 /// Generated client implementations.
 pub mod user_service_client {
     #![allow(
@@ -264,6 +281,30 @@ pub mod user_service_client {
             req.extensions_mut().insert(GrpcMethod::new("users.UserService", "GetUser"));
             self.inner.unary(req, path, codec).await
         }
+        pub async fn get_user_by_login(
+            &mut self,
+            request: impl tonic::IntoRequest<super::GetUserByLoginReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetUserByLoginRes>,
+            tonic::Status,
+        > {
+            self.inner
+                .ready()
+                .await
+                .map_err(|e| {
+                    tonic::Status::unknown(
+                        format!("Service was not ready: {}", e.into()),
+                    )
+                })?;
+            let codec = tonic_prost::ProstCodec::default();
+            let path = http::uri::PathAndQuery::from_static(
+                "/users.UserService/GetUserByLogin",
+            );
+            let mut req = request.into_request();
+            req.extensions_mut()
+                .insert(GrpcMethod::new("users.UserService", "GetUserByLogin"));
+            self.inner.unary(req, path, codec).await
+        }
         pub async fn update_user(
             &mut self,
             request: impl tonic::IntoRequest<super::UpdateUserReq>,
@@ -356,6 +397,13 @@ pub mod user_service_server {
             &self,
             request: tonic::Request<super::GetUserReq>,
         ) -> std::result::Result<tonic::Response<super::GetUserRes>, tonic::Status>;
+        async fn get_user_by_login(
+            &self,
+            request: tonic::Request<super::GetUserByLoginReq>,
+        ) -> std::result::Result<
+            tonic::Response<super::GetUserByLoginRes>,
+            tonic::Status,
+        >;
         async fn update_user(
             &self,
             request: tonic::Request<super::UpdateUserReq>,
@@ -521,6 +569,51 @@ pub mod user_service_server {
                     let inner = self.inner.clone();
                     let fut = async move {
                         let method = GetUserSvc(inner);
+                        let codec = tonic_prost::ProstCodec::default();
+                        let mut grpc = tonic::server::Grpc::new(codec)
+                            .apply_compression_config(
+                                accept_compression_encodings,
+                                send_compression_encodings,
+                            )
+                            .apply_max_message_size_config(
+                                max_decoding_message_size,
+                                max_encoding_message_size,
+                            );
+                        let res = grpc.unary(method, req).await;
+                        Ok(res)
+                    };
+                    Box::pin(fut)
+                }
+                "/users.UserService/GetUserByLogin" => {
+                    #[allow(non_camel_case_types)]
+                    struct GetUserByLoginSvc<T: UserService>(pub Arc<T>);
+                    impl<
+                        T: UserService,
+                    > tonic::server::UnaryService<super::GetUserByLoginReq>
+                    for GetUserByLoginSvc<T> {
+                        type Response = super::GetUserByLoginRes;
+                        type Future = BoxFuture<
+                            tonic::Response<Self::Response>,
+                            tonic::Status,
+                        >;
+                        fn call(
+                            &mut self,
+                            request: tonic::Request<super::GetUserByLoginReq>,
+                        ) -> Self::Future {
+                            let inner = Arc::clone(&self.0);
+                            let fut = async move {
+                                <T as UserService>::get_user_by_login(&inner, request).await
+                            };
+                            Box::pin(fut)
+                        }
+                    }
+                    let accept_compression_encodings = self.accept_compression_encodings;
+                    let send_compression_encodings = self.send_compression_encodings;
+                    let max_decoding_message_size = self.max_decoding_message_size;
+                    let max_encoding_message_size = self.max_encoding_message_size;
+                    let inner = self.inner.clone();
+                    let fut = async move {
+                        let method = GetUserByLoginSvc(inner);
                         let codec = tonic_prost::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
