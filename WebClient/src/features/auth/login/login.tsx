@@ -9,6 +9,7 @@ import { Button } from "@components/button/button";
 import type { AuthLogin } from "@entities/data/auth";
 import { useNotificationStore } from "@store/notification";
 import { enumNotifications } from "@entities/ui/notifications";
+import { useState } from "react";
 
 export function LoginForm({ action }: { action: () => void }) {
   const {
@@ -18,6 +19,7 @@ export function LoginForm({ action }: { action: () => void }) {
   } = useForm<AuthLogin>({ mode: "onChange" });;
   const { openRegister } = useAuthModalStore();
   const { add_notification } = useNotificationStore.getState();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   // const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
   async function OnSubmit(data: AuthLogin) {
@@ -57,11 +59,11 @@ export function LoginForm({ action }: { action: () => void }) {
       </button>
 
       <form
-        className="flex flex-col items-center w-full"
+        className="flex flex-col items-center  w-full"
         onSubmit={handleSubmit(OnSubmit)}
       >
         <Fields
-          className="grid grid-cols-1 gap-4 w-full px-4"
+          className="grid grid-cols-1 gap-4 w-full "
           register={register}
           errors={errors}
           fields={[
@@ -71,8 +73,8 @@ export function LoginForm({ action }: { action: () => void }) {
               required: true,
               type: typeInput.text,
               labelClassName: `text-gray-700 font-light text-sm md:text-base`,
-              inputClassName: `border-2 border-gray-300 rounded-xl p-2
-                w-full md:w-72 lg:w-80
+              inputClassName: `border-2 border-gray-300 rounded-xl
+                w-full md:w-72 lg:w-80 xl:w-90
                 active:border-fifth
                 focus:ring focus:border-third focus:ring-third`,
             },
@@ -83,7 +85,7 @@ export function LoginForm({ action }: { action: () => void }) {
               type: typeInput.password,
               labelClassName: `text-gray-700 font-light text-sm md:text-base`,
               inputClassName: `border-2 border-gray-300 rounded-xl p-2
-                w-full md:w-72 lg:w-80
+                w-full md:w-72 lg:w-80 xl:w-90
                 active:border-fifth
                 focus:ring focus:border-third focus:ring-third`,
             },
@@ -93,7 +95,7 @@ export function LoginForm({ action }: { action: () => void }) {
         <div className="flex flex-col mt-6 gap-4 w-full md:w-72">
           <Button
             type={typeButton.submit}
-            className="bg-fourth text-sixth font-semibold py-2
+            className="bg-fourth text-sixth font-semibold p-2
             rounded-xl transition-all hover:bg-third hover:text-sixth
             active:bg-third active:text-sixth"
           >
@@ -103,7 +105,7 @@ export function LoginForm({ action }: { action: () => void }) {
           <Button
             onClick={openRegister}
             type={typeButton.button}
-            className="border border-fifth text-fourth font-semibold py-2
+            className="border border-fifth text-fourth font-semibold p-2
             rounded-xl transition-all hover:bg-fifth
             active:bg-fourth active:text-sixth"
           >
