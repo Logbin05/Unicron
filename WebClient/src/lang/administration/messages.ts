@@ -42,7 +42,7 @@ export const MESSAGES: Record<Lang, Messages> = {
     home: {
       title: "Home",
       subtitle:
-        "Stay updated with the latest news, updates, and success stories from Unicorn",
+        "Stay updated with the latest news, updates, and success stories from Unicron",
     },
   },
   ru: {
@@ -85,7 +85,7 @@ export const MESSAGES: Record<Lang, Messages> = {
     home: {
       title: "Главная",
       subtitle:
-        "Будьте в курсе последних новостей, обновлений и историй успеха от Unicorn",
+        "Будьте в курсе последних новостей, обновлений и историй успеха от Unicron",
     },
   },
 };

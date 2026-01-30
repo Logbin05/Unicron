@@ -1,0 +1,91 @@
+import type { Lang } from "./lang";
+import type { Messages } from "@entities/ui/lang";
+
+export const MESSAGES: Record<Lang, Messages> = {
+  en: {
+    settings: {
+      title: "Settings",
+      subtitle: "Application profile and parameters",
+      language: "Interface language",
+      label_1: "FullName",
+      label_2: "Login",
+      label_3: "Email",
+      label_4: "Balance",
+      label_5: "Currency",
+      save: "Save changes",
+    },
+    sidebar: {
+      label_1: "Account",
+      label_2: "Courses",
+      label_3: "Other",
+      label_4: "Action",
+      home: "Home",
+      profile: "Profile",
+      message: "Message",
+      myCourse: "My course",
+      favorite: "Favorite",
+      dashboard: "Dashboard",
+      services: "Services",
+      settings: "Settings",
+      contact: "Supports",
+      logout: "LogOut",
+    },
+    profile: {
+      label_1: "Email",
+      label_2: "Login",
+      label_3: "Role",
+      label_4: "Payments ID",
+      label_5: "Balance",
+      label_6: "Subscription",
+      label_7: "Last Progress",
+    },
+    home: {
+      title: "Home",
+      subtitle:
+        "Stay updated with the latest news, updates, and success stories from Unicron",
+    },
+  },
+  ru: {
+    settings: {
+      title: "Настройки",
+      subtitle: "Профиль и параметры приложения",
+      language: "Язык интерфейса",
+      label_1: "Полное имя",
+      label_2: "Логин",
+      label_3: "Почта",
+      label_4: "Баланс",
+      label_5: "Валюта",
+      save: "Сохранить изменения",
+    },
+    sidebar: {
+      label_1: "Аккаунт",
+      label_2: "Курсы",
+      label_3: "Другое",
+      label_4: "Действия",
+      home: "Главная",
+      profile: "Профиль",
+      message: "Сообщения",
+      myCourse: "Мои курсы",
+      favorite: "Избранное",
+      dashboard: "Панель",
+      services: "Услуги",
+      settings: "Настройки",
+      contact: "Помощь",
+      logout: "Выйти",
+    },
+    profile: {
+      label_1: "Почта",
+      label_2: "Логин",
+      label_3: "Роль",
+      label_4: "Платежный ID",
+      label_5: "Баланс",
+      label_6: "Подписка",
+      label_7: "Последний прогресс",
+    },
+    home: {
+      title: "Главная",
+      subtitle:
+        "Будьте в курсе последних новостей, обновлений и историй успеха от Unicron",
+    },
+  },
+};
