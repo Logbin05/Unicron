@@ -1,4 +1,4 @@
-import { MESSAGES } from "@lang/messages";
+import { MESSAGES } from "@lang/user/messages";
 import { useLanguage } from "@hooks/useLanguage";
 import { mockUser, mockFinance } from "@mock/data";
 

@@ -8,7 +8,7 @@ pub struct AuthGrpc {
     pub paseto_key: Vec<u8>,
 }
 
-fn issue_paseto(user_id: i64, key_bytes: &[u8]) -> Result<String, tonic::Status> {
+pub fn issue_paseto(user_id: i64, key_bytes: &[u8]) -> Result<String, tonic::Status> {
     let key_array: [u8; 32] = key_bytes
         .try_into()
         .map_err(|_| tonic::Status::internal("Invalid key length (must be 32 bytes)"))?;
