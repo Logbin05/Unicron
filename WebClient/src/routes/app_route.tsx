@@ -6,6 +6,8 @@ import { ServicePage } from "@pages/users/ServicePage";
 import { SupportPage } from "@pages/users/SupportPage";
 import { HomePage } from "@pages/users/HomePage";
 import { SettingsPage } from "@pages/users/SettingsPage";
+import { TeacherLayout } from "@layouts/teacher/layout";
+import { TSettingsPage } from "@pages/teacher/SettingsPage";
 
 export function AppRoutes() {
   return (
@@ -18,6 +20,9 @@ export function AppRoutes() {
           <Route path="services" element={<ServicePage />} />
           <Route path="support" element={<SupportPage />} />
           <Route path="settings" element={<SettingsPage />} />
+        </Route>
+        <Route path="t/*" element={<TeacherLayout />}>
+          <Route path="settings" element={<TSettingsPage />} />
         </Route>
       </Routes>
     </>

@@ -5,20 +5,21 @@ import {
   HiCog6Tooth,
   HiInboxStack,
   HiBookOpen,
-  HiBookmark,
-  HiSquares2X2,
   HiOutlineViewfinderCircle,
-  HiShoppingBag,
+  HiMiniCurrencyDollar,
+  HiUserGroup,
+  HiSquare3Stack3D,
 } from "react-icons/hi2";
 import { motion } from "motion/react";
 import avatar from "@assets/image/avatar.jpeg";
-import { MESSAGES } from "@lang/user/messages";
 import { useLanguage } from "@hooks/useLanguage";
+import { MESSAGES } from "@lang/teacher/messages";
 import type { SidebarType } from "@store/sidebar";
 import { useEffect, useRef, useState } from "react";
 import { HiLogout, HiSupport } from "react-icons/hi";
+import { Link } from "react-router";
 
-export function SidebarUser() {
+export function SidebarTeacher() {
   const { lang } = useLanguage();
   const t = MESSAGES[lang].sidebar;
 
@@ -28,7 +29,7 @@ export function SidebarUser() {
   const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
+    function handleClickOutside(e: MouseEvent) {
       if (!innerRef.current) return;
       if (isMobile) return;
       if (
@@ -38,7 +39,7 @@ export function SidebarUser() {
       ) {
         setSidebar({ isOpen: false });
       }
-    };
+    }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [sidebar.isOpen, pinned, isMobile]);
@@ -50,17 +51,17 @@ export function SidebarUser() {
         {
           label: t.home,
           icon: <HiHome className="text-2xl" />,
-          link: "/u/home",
+          link: "/t/home",
         },
         {
           label: t.profile,
           icon: <HiUser className="text-2xl" />,
-          link: "/u/me",
+          link: "/t/me",
         },
         {
           label: t.message,
           icon: <HiInboxStack className="text-2xl" />,
-          link: "/u/message",
+          link: "/t/message",
         },
       ],
     },
@@ -70,12 +71,12 @@ export function SidebarUser() {
         {
           label: t.myCourse,
           icon: <HiBookOpen className="text-2xl" />,
-          link: "/u/course",
+          link: "/t/my-course",
         },
         {
           label: t.favorite,
-          icon: <HiBookmark className="text-2xl" />,
-          link: "/u/favorite",
+          icon: <HiMiniCurrencyDollar className="text-2xl" />,
+          link: "/t/income",
         },
       ],
     },
@@ -84,18 +85,18 @@ export function SidebarUser() {
       items: [
         {
           label: t.dashboard,
-          icon: <HiSquares2X2 className="text-2xl" />,
-          link: "/u/dashboard",
+          icon: <HiUserGroup className="text-2xl" />,
+          link: "/t/students",
         },
         {
           label: t.services,
-          icon: <HiShoppingBag className="text-2xl" />,
-          link: "/u/services",
+          icon: <HiSquare3Stack3D className="text-2xl" />,
+          link: "/t/services",
         },
         {
           label: t.settings,
           icon: <HiCog6Tooth className="text-2xl" />,
-          link: "/u/settings",
+          link: "/t/settings",
         },
       ],
     },
@@ -105,7 +106,7 @@ export function SidebarUser() {
         {
           label: t.contact,
           icon: <HiSupport className="text-2xl" />,
-          link: "/u/support",
+          link: "/t/support",
         },
         { label: t.logout, icon: <HiLogout className="text-2xl" />, link: "/" },
       ],
@@ -118,7 +119,7 @@ export function SidebarUser() {
 
   function renderMenuSection(
     title: string,
-    items: (typeof sections)[0]["items"]
+    items: (typeof sections)[0]["items"],
   ) {
     return (
       <div>
@@ -131,7 +132,7 @@ export function SidebarUser() {
         </p>
         <div className="flex flex-col">
           {items.map((item, i) => (
-            <a key={i} href={item.link}>
+            <Link key={i} to={item.link}>
               <motion.div
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -149,7 +150,7 @@ export function SidebarUser() {
                   {item.label}
                 </span>
               </motion.div>
-            </a>
+            </Link>
           ))}
         </div>
         <div className="my-3 border-t border-white/10" />
@@ -171,9 +172,11 @@ export function SidebarUser() {
         initial={{ x: isMobile ? -260 : 0 }}
         animate={{ x: sidebar.isOpen ? 0 : isMobile ? -260 : 0 }}
         transition={{ duration: 0.28, ease: "easeInOut" }}
-        className={`fixed top-0 left-0 h-full z-40 bg-fourth/70 dark:bg-neutral-900/70 backdrop-blur-xl border-r border-fifth/30 shadow-2xl transition-[width] duration-300 ease-in-out ${
-          sidebar.isOpen ? "w-64" : "w-20"
-        }`}
+        className={`fixed top-0 left-0 h-full z-40 bg-fourth/70 dark:bg-neutral-900/70
+          backdrop-blur-xl border-r border-fifth/30 shadow-2xl
+          transition-[width] duration-300 ease-in-out ${
+            sidebar.isOpen ? "w-64" : "w-20"
+          }`}
         onMouseEnter={() => !isMobile && setSidebar({ isOpen: true })}
         onMouseLeave={() =>
           !isMobile && !pinned && setSidebar({ isOpen: false })
@@ -224,7 +227,7 @@ export function SidebarUser() {
           </div>
           <div className="mt-5 px-3 overflow-y-hidden flex-1">
             {sections.map((section) =>
-              renderMenuSection(section.title, section.items)
+              renderMenuSection(section.title, section.items),
             )}
           </div>
         </div>
