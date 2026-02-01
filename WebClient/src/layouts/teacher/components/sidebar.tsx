@@ -56,7 +56,7 @@ export function SidebarTeacher() {
         {
           label: t.profile,
           icon: <HiUser className="text-2xl" />,
-          link: "/t/me",
+          link: "/t/card",
         },
         {
           label: t.message,

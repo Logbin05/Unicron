@@ -7,7 +7,7 @@ export interface Institutions {
   institution_avatar: string;
   institution_type: InstitutionType;
   institution_desc: string;
-  metadata: JSON;
+  metadata: InstitutionMetadata;
   created_at: string;
   updated_at: string;
 }
@@ -18,4 +18,11 @@ export interface InstitutionMembers {
   user_id: number;
   role_in_institution: InstRole;
   joined_at: string;
+}
+
+export interface InstitutionMetadata {
+  founded?: number;
+  city?: string;
+  website?: string;
+  [key: string]: string | number | undefined;
 }
