@@ -9,8 +9,21 @@ import avatarPlaceholder1 from "@assets/post/author1.jpeg";
 import avatarPlaceholder2 from "@assets/post/author2.jpeg";
 import type { User, UsersFinances } from "@entities/data/user";
 import type { Subscriptions, Tariffs } from "@entities/data/subscriptions";
-import { SubscriptionStatus, EnrollmentStatus } from "@entities/data/enums";
+import {
+  SubscriptionStatus,
+  EnrollmentStatus,
+  InstitutionType,
+  InstRole,
+} from "@entities/data/enums";
 import type { Categories, Course, Enrollments } from "@entities/data/course";
+import type { Basket } from "@entities/data/basket";
+import type { Certificates } from "@entities/data/certificates";
+import type {
+  Institutions,
+  InstitutionMembers,
+} from "@entities/data/institutions";
+import type { Services, BuyHistory } from "@entities/data/services";
+import type { Teacher, TeacherProfile } from "@entities/data/teacher";
 
 // Users
 export const mockUser: User = {
@@ -376,5 +389,142 @@ export const mockPosts: Post[] = [
     created_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
     updated_at: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString(),
     tags: ["Review", "Design", "Success Story", "Career"],
+  },
+];
+
+// Teacher
+export const mockTeachers: Teacher[] = [
+  {
+    teacher_id: 1,
+    teacher_user_id: 3,
+    teacher_bio: "Frontend developer with 10 years of experience",
+    teacher_specialization: "React / JS",
+    teacher_experience_years: 10,
+    teacher_rating: 4.9,
+    teacher_reviews_count: 200,
+    teacher_is_verified: true,
+    teacher_is_active: true,
+    teacher_created_at: "2024-01-01",
+    teacher_updated_at: "2025-01-01",
+  },
+  {
+    teacher_id: 2,
+    teacher_user_id: 5,
+    teacher_bio: "Marketing expert teaching SEO and ads",
+    teacher_specialization: "Digital Marketing",
+    teacher_experience_years: 7,
+    teacher_rating: 4.7,
+    teacher_reviews_count: 150,
+    teacher_is_verified: true,
+    teacher_is_active: true,
+    teacher_created_at: "2024-02-01",
+    teacher_updated_at: "2025-02-01",
+  },
+];
+
+export const mockTeacherProfiles: TeacherProfile[] = mockTeachers.map((t) => ({
+  user: mockUser,
+  teacher: t,
+}));
+
+// Institutions
+export const mockInstitutions: Institutions[] = [
+  {
+    institution_id: 1,
+    owner_user_id: 3,
+    institution_name: "React Academy",
+    institution_avatar: avatar,
+    institution_type: InstitutionType.UNIVERSITY,
+    institution_desc: "Top school for frontend developers",
+    metadata: {},
+    created_at: "2024-01-01",
+    updated_at: "2025-01-01",
+  },
+  {
+    institution_id: 2,
+    owner_user_id: 5,
+    institution_name: "Marketing Hub",
+    institution_avatar: avatar,
+    institution_type: InstitutionType.COLLEGE,
+    institution_desc: "Best digital marketing courses",
+    metadata: {},
+    created_at: "2024-03-01",
+    updated_at: "2025-03-01",
+  },
+];
+
+export const mockInstitutionMembers: InstitutionMembers[] = [
+  {
+    inst_member_id: 1,
+    institution_id: 1,
+    user_id: 3,
+    role_in_institution: InstRole.TEACHER,
+    joined_at: "2024-01-01",
+  },
+  {
+    inst_member_id: 2,
+    institution_id: 2,
+    user_id: 5,
+    role_in_institution: InstRole.TEACHER,
+    joined_at: "2024-03-01",
+  },
+];
+
+// BASKET
+export const mockBasket: Basket[] = [
+  {
+    basket_id: 1,
+    user_id: 1,
+    service_id: 1,
+    added_at: "2025-01-01",
+  },
+];
+
+// Services
+export const mockServices: Services[] = [
+  {
+    service_id: 1,
+    course_id: 1,
+    sub_id: 1,
+    sku: "react-001",
+    title: "React Beginner Course",
+    price: 49,
+    created_at: "2024-05-10",
+    updated_at: "2025-01-20",
+  },
+  {
+    service_id: 2,
+    course_id: 2,
+    sub_id: 1,
+    sku: "uiux-001",
+    title: "UI/UX Essentials",
+    price: 79,
+    created_at: "2024-09-03",
+    updated_at: "2025-02-01",
+  },
+];
+
+export const mockBuyHistory: BuyHistory[] = [
+  {
+    bh_id: 1,
+    user_id: 1,
+    service_id: 1,
+    amount: 49,
+    currency: "USD",
+    payment_provider: "Stripe",
+    provider_payment_id: 123456,
+    created_at: "2025-01-01",
+  },
+];
+
+// Certificates
+export const mockCertificates: Certificates[] = [
+  {
+    certificate_id: 1,
+    user_id: 1,
+    course_id: 1,
+    issued_at: "2025-04-01",
+    metadata: { grade: "A+" },
+    revoked: false,
   },
 ];

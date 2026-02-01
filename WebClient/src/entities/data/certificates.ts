@@ -3,7 +3,11 @@ export interface Certificates {
   user_id: number;
   course_id: number;
   issued_at: string;
-  metadata: JSON;
-  revorked: boolean;
+  metadata: CertificateMetadata;
+  revoked: boolean;
 }
 
+export interface CertificateMetadata {
+  grade?: string;
+  comments?: string;
+}

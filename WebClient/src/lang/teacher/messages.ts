@@ -22,7 +22,7 @@ export const MESSAGES: Record<Lang, Messages> = {
       label_4: "System",
 
       home: "Overview",
-      profile: "My Profile",
+      profile: "Profile",
       message: "Messages",
 
       myCourse: "My Courses",
