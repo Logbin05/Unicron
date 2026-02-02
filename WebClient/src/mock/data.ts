@@ -132,7 +132,7 @@ export const mockCourses: Course[] = [
   {
     course_id: 1,
     institution_id: 1,
-    author_id: 3,
+    author_id: 1,
     category_id: 1,
     course_name: "JavaScript Zero to Hero",
     course_slug: "javascript-zero-to-hero",

@@ -10,6 +10,7 @@ import { TeacherLayout } from "@layouts/teacher/layout";
 import { TSettingsPage } from "@pages/teacher/SettingsPage";
 import { TProfilePage } from "@pages/teacher/ProfilePage";
 import { THomePage } from "@pages/teacher/HomePage";
+import { MyCoursePage } from "@pages/teacher/MyCoursePage";
 
 export function AppRoutes() {
   return (
@@ -27,6 +28,7 @@ export function AppRoutes() {
           <Route path="home" element={<THomePage />} />
           <Route path="settings" element={<TSettingsPage />} />
           <Route path="card" element={<TProfilePage />} />
+          <Route path="my-course" element={<MyCoursePage />} />
         </Route>
       </Routes>
     </>
