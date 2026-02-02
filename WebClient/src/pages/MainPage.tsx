@@ -7,6 +7,7 @@ import { LoginForm } from "@features/auth/login/login";
 import { SignUpForm } from "@features/auth/registration/registration";
 import { BiLogIn, BiUserPlus, BiMenu, BiX } from "react-icons/bi";
 import { FaTelegramPlane, FaGithub, FaYoutube } from "react-icons/fa";
+import { ModalPortal } from "@components/portal/portal";
 
 export function MainPage() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -60,42 +61,44 @@ export function MainPage() {
           </motion.button>
         </nav>
 
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="absolute top-16 left-0 w-full bg-[#0a0a0a]
+        <ModalPortal>
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="absolute top-16 left-0 w-full bg-[#0a0a0a]
               border-t border-gray-800 flex flex-col items-center gap-4 py-6 lg:hidden"
-            >
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                onClick={() => {
-                  setMenuOpen(false);
-                  openLogin();
-                }}
-                className="text-sixth font-Jura flex items-center gap-2 text-lg"
               >
-                <BiLogIn />
-                Login
-              </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    openLogin();
+                  }}
+                  className="text-sixth font-Jura flex items-center gap-2 text-lg"
+                >
+                  <BiLogIn />
+                  Login
+                </motion.button>
 
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                onClick={() => {
-                  setMenuOpen(false);
-                  openRegister();
-                }}
-                className="text-sixth font-Jura flex items-center gap-2 text-lg"
-              >
-                <BiUserPlus />
-                Sign Up
-              </motion.button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  onClick={() => {
+                    setMenuOpen(false);
+                    openRegister();
+                  }}
+                  className="text-sixth font-Jura flex items-center gap-2 text-lg"
+                >
+                  <BiUserPlus />
+                  Sign Up
+                </motion.button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </ModalPortal>
       </header>
 
       <main className="flex flex-col lg:flex-row lg:justify-between lg:items-center xs:mt-10 lg:h-[80vh] lg:px-20">
@@ -140,33 +143,35 @@ export function MainPage() {
         </div>
       </main>
 
-      <AnimatePresence>
-        {modal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50"
-          >
+      <ModalPortal>
+        <AnimatePresence>
+          {modal && (
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white p-6 rounded-2xl w-11/12 max-w-md relative"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 backdrop-blur-md flex items-center justify-center z-50"
             >
-              <button
-                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-                onClick={close}
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                className="bg-white p-6 rounded-2xl w-11/12 max-w-md relative"
               >
-                <BiX size={24} />
-              </button>
+                <button
+                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+                  onClick={close}
+                >
+                  <BiX size={24} />
+                </button>
 
-              {modal === "login" && <LoginForm action={close} />}
-              {modal === "register" && <SignUpForm action={close} />}
+                {modal === "login" && <LoginForm action={close} />}
+                {modal === "register" && <SignUpForm action={close} />}
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+      </ModalPortal>
 
       <footer className="xs:my-10 xs:px-6 xs:py-8 bg-[#0a0a0a] text-sixth">
         <nav className="flex xs:flex-col sm:flex-row sm:justify-between gap-8 max-w-6xl mx-auto">
