@@ -11,6 +11,7 @@ export enum typeInput {
   text = "text",
   radio = "radio",
   button = "button",
+  number = "number",
   password = "password",
   checkbox = "checkbox",
 }

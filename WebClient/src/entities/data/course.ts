@@ -1,4 +1,9 @@
-import type { ContentType, EnrollmentStatus, KindType, StatusLesson } from "./enums";
+import type {
+  ContentType,
+  EnrollmentStatus,
+  KindType,
+  StatusLesson,
+} from "./enums";
 
 export interface Categories {
   category_id: number;
@@ -56,7 +61,7 @@ export interface Enrollments {
   user_id: number;
   course_id: number;
   progress: number;
-  status: EnrollmentStatus,
+  status: EnrollmentStatus;
   started_at: string;
   complected_at: string;
 }
@@ -69,3 +74,11 @@ export interface LessonProgress {
   updated_at: string;
 }
 
+export interface CreateCourseForm {
+  course_name: string;
+  course_slug: string;
+  course_desc: string;
+  category_id: number;
+  price: number;
+  is_published: boolean;
+}
