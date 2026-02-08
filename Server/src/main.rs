@@ -1,7 +1,7 @@
 use axum::{
+    Router,
     extract::{Json, State},
     routing::{get, post},
-    Router,
 };
 use dotenvy::dotenv;
 use rustls::crypto::{CryptoProvider, ring};
@@ -14,19 +14,25 @@ use hyper::server::conn::http2;
 use hyper_util::rt::{TokioExecutor, TokioIo};
 use hyper_util::service::TowerToHyperService;
 
-use crate::{services::users::src::repo::UserRepo, state::{AppState, SharedState}};
-use crate::structure::kafka::KafkaMessage;
-use crate::services::users::src::grpc::UserGrpc;
+use crate::generated::auth::auth_service_server::AuthServiceServer;
 use crate::generated::users::user_service_server::UserServiceServer;
+use crate::services::auth::src::clients::users::UserClient;
+use crate::services::auth::src::grpc::AuthGrpc;
+use crate::services::users::src::grpc::UserGrpc;
+use crate::structure::kafka::KafkaMessage;
+use crate::{
+    services::users::src::repo::UserRepo,
+    state::{AppState, SharedState},
+};
 
 pub mod db;
+pub mod generated;
 pub mod kafka;
+pub mod proto;
+pub mod services;
 pub mod state;
 pub mod structure;
 pub mod tls;
-pub mod generated;
-pub mod services;
-pub mod proto;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -49,19 +55,12 @@ async fn main() -> anyhow::Result<()> {
     let tls_config = tls::load_tls_config();
     let tls_acceptor = TlsAcceptor::from(tls_config);
 
-    tracing::info!("Listening on HTTPS (HTTP/2): https://{}", http_addr);
+    tracing::info!("HTTP listening on https://{}", http_addr);
 
     let http_app_clone = http_app.clone();
     tokio::spawn(async move {
         loop {
-            let (stream, _) = match listener.accept().await {
-                Ok(v) => v,
-                Err(err) => {
-                    tracing::error!("Accept error: {err}");
-                    continue;
-                }
-            };
-
+            let (stream, _) = listener.accept().await.unwrap();
             let tls_acceptor = tls_acceptor.clone();
             let service = TowerToHyperService::new(http_app_clone.clone());
 
@@ -69,35 +68,51 @@ async fn main() -> anyhow::Result<()> {
                 let tls_stream = match tls_acceptor.accept(stream).await {
                     Ok(s) => s,
                     Err(err) => {
-                        tracing::warn!("TLS handshake failed: {err}");
+                        tracing::warn!("TLS handshake failed: {}", err);
                         return;
                     }
                 };
-
                 let io = TokioIo::new(tls_stream);
-
                 if let Err(err) = http2::Builder::new(TokioExecutor::new())
                     .serve_connection(io, service)
                     .await
                 {
-                    tracing::error!("HTTP/2 error: {err}");
+                    tracing::error!("HTTP/2 error: {}", err);
                 }
             });
         }
     });
 
-    let grpc_addr = "127.0.0.1:50051".parse()?;
+    let users_grpc_addr = "127.0.0.1:50051".parse()?;
     let user_repo = UserRepo::new(app_state.db.clone());
-    let grpc_service = UserGrpc {
-    repo: user_repo.into(),
-    state: app_state.clone(),
-};
+    let user_grpc_service = UserGrpc {
+        repo: std::sync::Arc::new(user_repo),
+        state: app_state.clone(),
+    };
 
     tokio::spawn(async move {
-        tracing::info!("gRPC server listening on {}", grpc_addr);
+        tracing::info!("Users gRPC listening on {}", users_grpc_addr);
         tonic::transport::Server::builder()
-            .add_service(UserServiceServer::new(grpc_service))
-            .serve(grpc_addr)
+            .add_service(UserServiceServer::new(user_grpc_service))
+            .serve(users_grpc_addr)
+            .await
+            .unwrap();
+    });
+
+    let auth_grpc_addr = "127.0.0.1:50052".parse()?;
+    let user_client = UserClient::connect("http://127.0.0.1:50051".to_string()).await?;
+    let paseto_env = std::env::var("PASETO_KEY").expect("PASETO_KEY not set");
+
+    let auth_grpc_service = AuthGrpc {
+        users: user_client,
+        paseto_key: paseto_env.into(),
+    };
+
+    tokio::spawn(async move {
+        tracing::info!("Auth gRPC listening on {}", auth_grpc_addr);
+        tonic::transport::Server::builder()
+            .add_service(AuthServiceServer::new(auth_grpc_service))
+            .serve(auth_grpc_addr)
             .await
             .unwrap();
     });
@@ -121,10 +136,7 @@ async fn redis_test(State(state): State<SharedState>) -> String {
     }
 }
 
-async fn send_kafka(
-    State(state): State<SharedState>,
-    Json(msg): Json<KafkaMessage>,
-) -> String {
+async fn send_kafka(State(state): State<SharedState>, Json(msg): Json<KafkaMessage>) -> String {
     match kafka::send_message(&state.kafka_producer, &msg.topic, &msg.key, &msg.payload).await {
         Ok(_) => format!("Message sent to topic '{}'", msg.topic),
         Err(err) => format!("Kafka send error: {}", err),
