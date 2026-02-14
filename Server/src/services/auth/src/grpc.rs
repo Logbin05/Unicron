@@ -60,6 +60,7 @@ impl AuthService for AuthGrpc {
 
         let res = users
             .create_user(CreateNewUserReq {
+                role_id: 6,
                 full_name: req.full_name,
                 login: req.login,
                 email: req.email,

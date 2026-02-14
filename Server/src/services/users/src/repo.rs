@@ -31,10 +31,11 @@ impl UserRepo {
     pub async fn create_user(&self, req: &CreateNewUserReq) -> Result<User> {
         let row = sqlx::query!(
             r#"
-            INSERT INTO users (full_name, login, email, password_hash)
-            VALUES ($1, $2, $3, $4)
+            INSERT INTO users (role_id, full_name, login, email, password_hash)
+            VALUES ($1, $2, $3, $4, $5)
             RETURNING user_id, role_id, full_name, login, email, avatar, is_verified, created_at, updated_at
             "#,
+            req.role_id,
             req.full_name,
             req.login,
             req.email,
