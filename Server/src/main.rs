@@ -1,3 +1,4 @@
+use base64;
 use axum::{
     Router,
     extract::{Json, State},
@@ -103,9 +104,16 @@ async fn main() -> anyhow::Result<()> {
     let user_client = UserClient::connect("http://127.0.0.1:50051".to_string()).await?;
     let paseto_env = std::env::var("PASETO_KEY").expect("PASETO_KEY not set");
 
+    let paseto_key = base64::decode(paseto_env.trim())
+      .expect("Invalid base64 PASETO_KEY");
+
+    if paseto_key.len() != 32 {
+      panic!("PASETO_KEY must decode to exactly 32 bytes, got {}", paseto_key.len());
+    }
+
     let auth_grpc_service = AuthGrpc {
         users: user_client,
-        paseto_key: paseto_env.into(),
+        paseto_key,
     };
 
     tokio::spawn(async move {
