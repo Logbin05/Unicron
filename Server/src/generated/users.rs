@@ -59,13 +59,15 @@ pub struct Log {
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
 pub struct CreateNewUserReq {
-    #[prost(string, tag = "1")]
-    pub full_name: ::prost::alloc::string::String,
+    #[prost(int64, tag = "1")]
+    pub role_id: i64,
     #[prost(string, tag = "2")]
-    pub login: ::prost::alloc::string::String,
+    pub full_name: ::prost::alloc::string::String,
     #[prost(string, tag = "3")]
-    pub email: ::prost::alloc::string::String,
+    pub login: ::prost::alloc::string::String,
     #[prost(string, tag = "4")]
+    pub email: ::prost::alloc::string::String,
+    #[prost(string, tag = "5")]
     pub password_hash: ::prost::alloc::string::String,
 }
 #[derive(Clone, PartialEq, Eq, Hash, ::prost::Message)]
